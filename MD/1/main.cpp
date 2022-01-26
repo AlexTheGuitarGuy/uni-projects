@@ -23,6 +23,6 @@ int main()
     default:
         cout << "Valoare invalida.";
     }*/
-    adjacencyMatrixGraph();
+    adjacencyListGraph();
     return (0);
 }

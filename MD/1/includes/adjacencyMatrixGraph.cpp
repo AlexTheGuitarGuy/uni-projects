@@ -78,7 +78,7 @@ void graphIntroduce()
     int i, j;
     try
     {
-        cout << "Ce varfuri se unesc? (separati prin spatiu, introduceti o valoare negativa pentru a inceta)\n";
+        cout << "Ce varfuri se unesc? (introduceti perechi separate sau introduceti o valoare negativa pentru a inceta)\n";
         while (true)
         {
             
