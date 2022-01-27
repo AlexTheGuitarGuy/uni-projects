@@ -81,11 +81,11 @@ void graphIntroduce()
         cout << "Ce varfuri se unesc? (introduceti perechi separate sau introduceti o valoare negativa pentru a inceta)\n";
         while (true)
         {
-            
+
             cin >> i >> j;
             i--;
             j--;
-            cout<< "_\n";
+            cout << "_\n";
             if (i >= input.v || j >= input.v)
             {
                 cout << "\nValoare invalida.\n";
@@ -112,7 +112,7 @@ void graphIntroduce()
 
 void graphPrint()
 {
-    cout<< "Graful obtinut:\n";
+    cout << "Graful obtinut:\n";
     cout << "\t";
     for (int i = 0; i < input.v; i++)
     {
@@ -146,24 +146,15 @@ int adjacencyMatrixGraph()
 
     getGraphShape();
     if (fail)
-    {
-        cout << "\nTerminare program.\n";
         return (0);
-    }
 
     input.arr = graphAllocate();
     if (fail)
-    {
-        cout << "\nTerminare program.\n";
         return (0);
-    }
 
     graphIntroduce();
     if (fail)
-    {
-        cout << "\nTerminare program.\n";
         return (0);
-    }
 
     graphPrint();
     return (1);

@@ -176,24 +176,15 @@ int incidencyMatrixGraph()
 
     getGraphShape();
     if (fail)
-    {
-        cout << "\nTerminare program.\n";
         return (0);
-    }
 
     input.arr = graphAllocate();
     if (fail)
-    {
-        cout << "\nTerminare program.\n";
         return (0);
-    }
 
     graphIntroduce();
     if (fail)
-    {
-        cout << "\nTerminare program.\n";
         return (0);
-    }
 
     graphPrint();
     return (1);
