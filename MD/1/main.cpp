@@ -7,7 +7,7 @@ using namespace std;
 int main()
 {
     int type;
-    cout << "Alegeti modul de reprezentare a grafului:\n";
+    cout << "Alegeti modul de reprezentare al grafului:\n";
     cout << "1 - Matrice de incidenta\n";
     cout << "2 - Matrice de adiacenta\n";
     cout << "3 - Lista de adiacenta\n";
