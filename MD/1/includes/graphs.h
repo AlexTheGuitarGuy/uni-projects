@@ -4,5 +4,3 @@
 int incidencyMatrixGraph();
 int adjacencyMatrixGraph();
 int adjacencyListGraph();
-
-
