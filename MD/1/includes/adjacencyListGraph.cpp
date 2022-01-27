@@ -4,74 +4,107 @@
 
 using namespace std;
 
-struct graphList
+struct node
 {
-    int entry;
-    graphList *next;
+    int data;
+    node *next;
 };
 
-typedef struct
+class linked_list
 {
-    int v;
-    graphList **head;
-} graph;
-graph input;
+private:
+    node *head, *tail;
 
+public:
+    linked_list()
+    {
+        head = NULL;
+        tail = NULL;
+    }
+
+    void add_node(int n)
+    {
+        node *tmp = new node;
+        tmp->data = n;
+        tmp->next = NULL;
+
+        if (head == NULL)
+        {
+            head = tmp;
+            tail = tmp;
+        }
+        else
+        {
+            tail->next = tmp;
+            tail = tail->next;
+        }
+    }
+
+    void print_list()
+    {
+        node *tmp = new node;
+        tmp = head;
+        while (tmp->next != NULL)
+        {
+            cout << tmp->data << ' ';
+            tmp = tmp->next;
+        }
+        cout << tmp->data << ' ';
+        tmp = tmp->next;
+    }
+
+};
+
+int v;
 int fail = 0;
 int isOriented = 0;
+linked_list graph[100];
 
-graphList **graphAllocate()
+
+void graphAllocate()
 {
     try
     {
 
         cout << "Cate varfuri va avea graful? ";
-        cin >> input.v;
-        if (input.v < 1)
+        cin >> v;
+        if (v < 1)
         {
             cout << "\nMarime invalida.\n";
             fail = 1;
-            return NULL;
+            return;
         }
         cout << "\n";
 
-        input.head = (graphList **)malloc(input.v * sizeof(graphList *));
-        for (int i = 0; i < input.v; i++)
-        {
-            input[i]->head = (graphList *)malloc(sizeof(graphList));
-        }
+        //graph = (linked_list *)malloc(v * sizeof(linked_list));
     }
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
         fail = 1;
-        return NULL;
+        return;
     }
-
-    return (input.head);
 }
 
 void graphIntroduce()
 {
-    graphList **tmp = input.head;
 
-    for (int i = 0, size; i < input.v; i++)
+    for (int i = 0; i < v; i++)
     {
+        int data = 1;
         try
         {
-            cout << "Ce varfuri se unesc cu varful " << i + 1 << "? (introduceti numere separate sau introduceti o valoare negativa pentru a inceta)\n";
-            while (true)
+            cout << "\nCe varfuri se unesc cu varful " << i + 1 << "? (introduceti numere separate sau introduceti 0 pentru a inceta)\n";
+            while (data != 0)
             {
-                cin >> tmp[i]->entry;
-                /*if(i < 0)
-                    break;
-                tmp[i]->next = (graphList *)malloc(sizeof(graphList) * 3);
-                tmp[i] = tmp[i]->next;
-
-            }
-            tmp[i]->entry = '\0';
-            tmp[i]->next = NULL;*/
-                break;
+                cin >> data;
+                if (data < 0 || data > v)
+                {
+                    cout << "\nValoare invalida\n";
+                    fail = 1;
+                    return;
+                }
+                graph[i].add_node(data);
             }
         }
         catch (std::ios_base::failure const &ex)
@@ -85,15 +118,12 @@ void graphIntroduce()
 
 void graphPrint()
 {
-    graphList **tmp = input.head;
-
-    for (int i = 0, size; i < input.v; i++)
+    cout << "\nGraful rezultant:\n";
+    for (int i = 0; i < v; i++)
     {
-        while (tmp[i]->next != NULL)
-        {
-            cout << tmp[i]->entry << ' ';
-            tmp[i] = tmp[i]->next;
-        }
+        cout << i + 1 << " -> ";
+
+        graph[i].print_list();
         cout << '\n';
     }
 }
@@ -102,23 +132,20 @@ int adjacencyListGraph()
 {
     cin.exceptions(std::ios_base::failbit);
 
-    cout << "\nEste orientat graful dat? (1/0)\n";
-    cin >> isOriented;
+    // cout << "\nEste orientat graful dat? (1/0)\n";
+    // cin >> isOriented;
 
-    input.head = graphAllocate();
+    graphAllocate();
     if (fail)
-    {
-        cout << "\nTerminare program.\n";
         return (0);
-    }
-
     graphIntroduce();
+
     if (fail)
-    {
-        cout << "\nTerminare program.\n";
         return (0);
-    }
 
     graphPrint();
+    if (fail)
+        return (0);
+
     return (1);
 }

@@ -6,10 +6,11 @@ using namespace std;
 
 int main()
 {
-    /*int type;
+    int type;
     cout << "Alegeti modul de reprezentare a grafului:\n";
     cout << "1 - Matrice de incidenta\n";
     cout << "2 - Matrice de adiacenta\n";
+    cout << "3 - Lista de adiacenta\n";
     cin >> type;
 
     switch (type)
@@ -20,9 +21,12 @@ int main()
     case 2:
         adjacencyMatrixGraph();
         break;
+    case 3:
+        adjacencyListGraph();
+        break;
     default:
         cout << "Valoare invalida.";
-    }*/
-    adjacencyListGraph();
+    }
+
     return (0);
 }
