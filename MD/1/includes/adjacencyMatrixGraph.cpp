@@ -4,17 +4,18 @@
 
 using namespace std;
 
-typedef struct
+class adjacencyMatrix
 {
+public:
     int v;
     int **arr;
-} adjacencyGraph;
-adjacencyGraph ag_input;
+    int isOriented;
+};
+adjacencyMatrix am_input;
 
 int ag_fail = 0;
-int ag_isOriented = 0;
 
-int getAdjacencyGraphShape()
+int getAdjacencyMatrixShape()
 {
 
     try
@@ -22,8 +23,8 @@ int getAdjacencyGraphShape()
         while (true)
         {
             cout << "\nCate varfuri va avea graful? ";
-            cin >> ag_input.v;
-            if (ag_input.v < 1)
+            cin >> am_input.v;
+            if (am_input.v < 1)
             {
                 cout << "\nMarime invalida, introduceti din nou.\n";
             }
@@ -40,22 +41,22 @@ int getAdjacencyGraphShape()
     return 0;
 }
 
-int **adjacencyGraphAllocate()
+int **adjacencyMatrixAllocate()
 {
 
-    ag_input.arr = (int **)malloc(ag_input.v * ag_input.v * sizeof(int *));
+    am_input.arr = (int **)malloc(am_input.v * am_input.v * sizeof(int *));
 
-    if (ag_input.arr == NULL)
+    if (am_input.arr == NULL)
     {
         cout << "A eșuat alocarea memoriei pentru întregul tablou.";
         ag_fail = 1;
         return (NULL);
     }
 
-    for (int i = 0; i < ag_input.v; i++)
+    for (int i = 0; i < am_input.v; i++)
     {
-        ag_input.arr[i] = (int *)malloc(ag_input.v * sizeof(int));
-        if (ag_input.arr[i] == NULL)
+        am_input.arr[i] = (int *)malloc(am_input.v * sizeof(int));
+        if (am_input.arr[i] == NULL)
         {
             cout << "A eșuat alocarea memoriei pentru subtabloul " << i << " al tabloului bidimensional.";
             ag_fail = 1;
@@ -63,16 +64,16 @@ int **adjacencyGraphAllocate()
         }
     }
 
-    return (ag_input.arr);
+    return (am_input.arr);
 }
 
-void adjacencyGraphIntroduce()
+void adjacencyMatrixIntroduce()
 {
-    for (int i = 0; i < ag_input.v; i++)
+    for (int i = 0; i < am_input.v; i++)
     {
-        for (int j = 0; j < ag_input.v; j++)
+        for (int j = 0; j < am_input.v; j++)
         {
-            ag_input.arr[i][j] = 0;
+            am_input.arr[i][j] = 0;
         }
     }
 
@@ -87,7 +88,7 @@ void adjacencyGraphIntroduce()
             i--;
             j--;
             cout << "_\n";
-            if (i >= ag_input.v || j >= ag_input.v)
+            if (i >= am_input.v || j >= am_input.v)
             {
                 cout << "\nValoare invalida, introduceti din nou.\n";
                 continue;
@@ -95,10 +96,10 @@ void adjacencyGraphIntroduce()
             else if (i < 0 || j < 0)
                 break;
 
-            ag_input.arr[i][j] = 1;
-            if (!ag_isOriented)
+            am_input.arr[i][j] = 1;
+            if (!am_input.isOriented)
             {
-                ag_input.arr[j][i] = 1;
+                am_input.arr[j][i] = 1;
             }
         }
     }
@@ -110,34 +111,34 @@ void adjacencyGraphIntroduce()
     }
 }
 
-void adjacencyGraphPrint()
+void adjacencyMatrixPrint()
 {
     cout << "Graful obtinut:\n";
     cout << "\t";
-    for (int i = 0; i < ag_input.v; i++)
+    for (int i = 0; i < am_input.v; i++)
     {
         cout << i + 1 << '\t';
     }
     cout << "\n";
-    for (int i = 0; i < ag_input.v; i++)
+    for (int i = 0; i < am_input.v; i++)
     {
         cout << "\t_";
     }
     cout << "\n";
 
-    for (int i = 0; i < ag_input.v; i++)
+    for (int i = 0; i < am_input.v; i++)
     {
         cout << i + 1 << "|\t";
-        for (int j = 0; j < ag_input.v; j++)
+        for (int j = 0; j < am_input.v; j++)
         {
-            cout << ag_input.arr[i][j] << '\t';
+            cout << am_input.arr[i][j] << '\t';
         }
         cout << "\n";
     }
     cout << "\n";
 }
 
-int adjacencyMatrixGraph()
+adjacencyMatrix adjacencyMatrixGraph()
 {
     cin.exceptions(std::ios_base::failbit);
 
@@ -146,8 +147,8 @@ int adjacencyMatrixGraph()
         while (true)
         {
             cout << "\nEste orientat graful dat? (1/0)\n";
-            cin >> ag_isOriented;
-            if (ag_isOriented != 1 && ag_isOriented != 0)
+            cin >> am_input.isOriented;
+            if (am_input.isOriented != 1 && am_input.isOriented != 0)
             {
                 cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
             }
@@ -158,21 +159,21 @@ int adjacencyMatrixGraph()
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
-        return 0;
+        return;
     }
 
-    getAdjacencyGraphShape();
+    getAdjacencyMatrixShape();
     if (ag_fail)
-        return (0);
+        return;
 
-    ag_input.arr = adjacencyGraphAllocate();
+    am_input.arr = adjacencyMatrixAllocate();
     if (ag_fail)
-        return (0);
+        return;
 
-    adjacencyGraphIntroduce();
+    adjacencyMatrixIntroduce();
     if (ag_fail)
-        return (0);
+        return;
 
-    adjacencyGraphPrint();
-    return (1);
+    adjacencyMatrixPrint();
+    return am_input;
 }

@@ -3,18 +3,19 @@
 #include <iostream>
 
 using namespace std;
-typedef struct
+class incidencyMatrix
 {
+public:
     int v;
     int m;
     int **arr;
-} incidencyGraph;
-incidencyGraph ig_input;
+    int isOriented;
+};
+incidencyMatrix im_input;
 
 int ig_fail = 0;
-int ig_isOriented = 0;
 
-int getIncidencyGraphShape()
+int getIncidencyMatrixShape()
 {
 
     try
@@ -23,8 +24,8 @@ int getIncidencyGraphShape()
         {
 
             cout << "\nCate varfuri va avea graful? ";
-            cin >> ig_input.v;
-            if (ig_input.v < 1)
+            cin >> im_input.v;
+            if (im_input.v < 1)
             {
                 cout << "\nMarime invalida, introduceti din nou.\n";
             }
@@ -35,8 +36,8 @@ int getIncidencyGraphShape()
         while (true)
         {
             cout << "\nCate muchii va avea graful? ";
-            cin >> ig_input.m;
-            if (ig_input.m < 1)
+            cin >> im_input.m;
+            if (im_input.m < 1)
             {
                 cout << "\nMarime invalida, introduceti din nou.\n";
             }
@@ -53,22 +54,22 @@ int getIncidencyGraphShape()
     return 0;
 }
 
-int **incidencyGraphAllocate()
+int **incidencyMatrixAllocate()
 {
 
-    ig_input.arr = (int **)malloc(ig_input.m * ig_input.v * sizeof(int *));
+    im_input.arr = (int **)malloc(im_input.m * im_input.v * sizeof(int *));
 
-    if (ig_input.arr == NULL)
+    if (im_input.arr == NULL)
     {
         cout << "A eșuat alocarea memoriei pentru întregul tablou.";
         ig_fail = 1;
         return (NULL);
     }
 
-    for (int i = 0; i < ig_input.m; i++)
+    for (int i = 0; i < im_input.m; i++)
     {
-        ig_input.arr[i] = (int *)malloc(ig_input.v * sizeof(int));
-        if (ig_input.arr[i] == NULL)
+        im_input.arr[i] = (int *)malloc(im_input.v * sizeof(int));
+        if (im_input.arr[i] == NULL)
         {
             cout << "A eșuat alocarea memoriei pentru subtabloul " << i << " al tabloului bidimensional.";
             ig_fail = 1;
@@ -76,19 +77,19 @@ int **incidencyGraphAllocate()
         }
     }
 
-    return (ig_input.arr);
+    return (im_input.arr);
 }
 
-void incidencyGraphIntroduce()
+void incidencyMatrixIntroduce()
 {
     int in, out;
-    for (int i = 0; i < ig_input.m; i++)
+    for (int i = 0; i < im_input.m; i++)
     {
         try
         {
             while (true)
             {
-                if (ig_isOriented)
+                if (im_input.isOriented)
                 {
                     cout << "\nDin care varf iese muchia " << i + 1 << "? ";
                 }
@@ -97,7 +98,7 @@ void incidencyGraphIntroduce()
 
                 cin >> out;
                 out--;
-                if (out >= ig_input.v || out < 0)
+                if (out >= im_input.v || out < 0)
                 {
                     cout << "\nNu exista varful dat, introduceti din nou.\n";
                 }
@@ -106,7 +107,7 @@ void incidencyGraphIntroduce()
             }
             while (true)
             {
-                if (ig_isOriented)
+                if (im_input.isOriented)
                 {
                     cout << "\nIn care varf intra muchia " << i + 1 << "? ";
                 }
@@ -114,7 +115,7 @@ void incidencyGraphIntroduce()
                     cout << ' ';
                 cin >> in;
                 in--;
-                if (in >= ig_input.v || in < 0)
+                if (in >= im_input.v || in < 0)
                 {
                     cout << "\nNu exista varful dat, introduceti din nou\n";
                 }
@@ -129,54 +130,54 @@ void incidencyGraphIntroduce()
             return;
         }
 
-        for (int j = 0; j < ig_input.v; j++)
+        for (int j = 0; j < im_input.v; j++)
         {
             if (j == in)
             {
-                ig_input.arr[i][j] = 1;
+                im_input.arr[i][j] = 1;
             }
-            else if (j == out && ig_isOriented)
+            else if (j == out && im_input.isOriented)
             {
-                ig_input.arr[i][j] = -1;
+                im_input.arr[i][j] = -1;
             }
-            else if (j == out && !ig_isOriented)
+            else if (j == out && !im_input.isOriented)
             {
-                ig_input.arr[i][j] = 1;
+                im_input.arr[i][j] = 1;
             }
             else
-                ig_input.arr[i][j] = 0;
+                im_input.arr[i][j] = 0;
         }
     }
 }
 
-void incidencyGraphPrint()
+void incidencyMatrixPrint()
 {
     cout << "\nGraful obtinut:\n";
     cout << "\t";
-    for (int i = 0; i < ig_input.v; i++)
+    for (int i = 0; i < im_input.v; i++)
     {
         cout << i + 1 << '\t';
     }
     cout << "\n";
-    for (int i = 0; i < ig_input.v; i++)
+    for (int i = 0; i < im_input.v; i++)
     {
         cout << "\t_";
     }
     cout << "\n";
 
-    for (int i = 0; i < ig_input.m; i++)
+    for (int i = 0; i < im_input.m; i++)
     {
         cout << i + 1 << "|\t";
-        for (int j = 0; j < ig_input.v; j++)
+        for (int j = 0; j < im_input.v; j++)
         {
-            cout << ig_input.arr[i][j] << '\t';
+            cout << im_input.arr[i][j] << '\t';
         }
         cout << "\n";
     }
     cout << "\n";
 }
 
-int incidencyMatrixGraph()
+incidencyMatrix incidencyMatrixGraph()
 {
     cin.exceptions(std::ios_base::failbit);
 
@@ -185,8 +186,8 @@ int incidencyMatrixGraph()
         while (true)
         {
             cout << "\nEste orientat graful dat? (1/0)\n";
-            cin >> ig_isOriented;
-            if (ig_isOriented != 1 && ig_isOriented != 0)
+            cin >> im_input.isOriented;
+            if (im_input.isOriented != 1 && im_input.isOriented != 0)
             {
                 cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
             }
@@ -197,21 +198,21 @@ int incidencyMatrixGraph()
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
-        return 0;
+        return;
     }
 
-    getIncidencyGraphShape();
+    getIncidencyMatrixShape();
     if (ig_fail)
-        return (0);
+        return;
 
-    ig_input.arr = incidencyGraphAllocate();
+    im_input.arr = incidencyMatrixAllocate();
     if (ig_fail)
-        return (0);
+        return;
 
-    incidencyGraphIntroduce();
+    incidencyMatrixIntroduce();
     if (ig_fail)
-        return (0);
+        return;
 
-    incidencyGraphPrint();
-    return (1);
+    incidencyMatrixPrint();
+    return im_input;
 }

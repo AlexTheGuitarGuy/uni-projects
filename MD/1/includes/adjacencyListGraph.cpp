@@ -67,10 +67,17 @@ public:
     }
 };
 
-int v;
+class graphList
+{
+public:
+    int v;
+    int isOriented;
+    linked_list graphList[100];
+};
+
+graphList al_input;
+
 int listFail = 0;
-int listIsOriented = 0;
-linked_list graphList[100];
 
 void graphListAllocate()
 {
@@ -79,8 +86,8 @@ void graphListAllocate()
         while (true)
         {
             cout << "\nCate varfuri va avea graful? ";
-            cin >> v;
-            if (v < 1)
+            cin >> al_input.v;
+            if (al_input.v < 1)
             {
                 cout << "\nMarime invalida, introduceti din nou.\n";
             }
@@ -101,7 +108,7 @@ void graphListAllocate()
 void graphListIntroduce()
 {
 
-    for (int i = 0; i < v; i++)
+    for (int i = 0; i < al_input.v; i++)
     {
         int data = 1;
         try
@@ -112,7 +119,7 @@ void graphListIntroduce()
                 while (true)
                 {
                     cin >> data;
-                    if (data < 0 || data > v)
+                    if (data < 0 || data > al_input.v)
                     {
                         cout << "\nValoare invalida, introduceti din nou\n";
                     }
@@ -122,10 +129,10 @@ void graphListIntroduce()
 
                 if (data != 0)
                 {
-                    if (!graphList[i].isPresent(data))
-                        graphList[i].add_node(data);
-                    if (!graphList[data - 1].isPresent(i + 1) && !listIsOriented)
-                        graphList[data - 1].add_node(i + 1);
+                    if (!al_input.graphList[i].isPresent(data))
+                        al_input.graphList[i].add_node(data);
+                    if (!al_input.graphList[data - 1].isPresent(i + 1) && !al_input.isOriented)
+                        al_input.graphList[data - 1].add_node(i + 1);
                 }
             }
         }
@@ -137,24 +144,24 @@ void graphListIntroduce()
         }
     }
 
-    for (int i = 0; i < v; i++)
+    for (int i = 0; i < al_input.v; i++)
     {
-        graphList[i].add_node(0);
+        al_input.graphList[i].add_node(0);
     }
 }
 
 void graphListPrint()
 {
     cout << "\nGraful rezultant:\n";
-    for (int i = 0; i < v; i++)
+    for (int i = 0; i < al_input.v; i++)
     {
         cout << i + 1 << " -> ";
-        graphList[i].print_list();
+        al_input.graphList[i].print_list();
         cout << '\n';
     }
 }
 
-int adjacencyListGraph()
+graphList adjacencyListGraph()
 {
     cin.exceptions(std::ios_base::failbit);
 
@@ -163,8 +170,8 @@ int adjacencyListGraph()
         while (true)
         {
             cout << "\nEste orientat graful dat? (1/0)\n";
-            cin >> listIsOriented;
-            if (listIsOriented != 1 && listIsOriented != 0)
+            cin >> al_input.isOriented;
+            if (al_input.isOriented != 1 && al_input.isOriented != 0)
             {
                 cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
             }
@@ -175,20 +182,20 @@ int adjacencyListGraph()
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
-        return 0;
+        return ;
     }
 
     graphListAllocate();
     if (listFail)
-        return (0);
+        return;
     graphListIntroduce();
 
     if (listFail)
-        return (0);
+        return;
 
     graphListPrint();
     if (listFail)
-        return (0);
+        return;
 
-    return (1);
+    return al_input;
 }
