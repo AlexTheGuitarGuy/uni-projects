@@ -8,8 +8,8 @@ class adjacencyMatrix
 {
 public:
     int v;
-    int **arr;
     int isOriented;
+    int **arr;
 };
 adjacencyMatrix am_input;
 

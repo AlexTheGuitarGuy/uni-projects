@@ -8,8 +8,8 @@ class incidencyMatrix
 public:
     int v;
     int m;
-    int **arr;
     int isOriented;
+    int **arr;
 };
 incidencyMatrix im_input;
 
