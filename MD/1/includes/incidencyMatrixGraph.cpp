@@ -3,164 +3,173 @@
 #include <iostream>
 
 using namespace std;
-
 typedef struct
 {
     int v;
     int m;
     int **arr;
-} graph;
-graph input;
+} incidencyGraph;
+incidencyGraph ig_input;
 
-int fail = 0;
-int isOriented = 0;
+int ig_fail = 0;
+int ig_isOriented = 0;
 
-int getGraphShape()
+int getIncidencyGraphShape()
 {
 
     try
     {
-
-        cout << "Cate varfuri va avea graful? ";
-        cin >> input.v;
-        if (input.v < 1)
+        while (true)
         {
-            cout << "\nMarime invalida.\n";
-            fail = 1;
-            return 1;
+
+            cout << "\nCate varfuri va avea graful? ";
+            cin >> ig_input.v;
+            if (ig_input.v < 1)
+            {
+                cout << "\nMarime invalida, introduceti din nou.\n";
+            }
+            else
+                break;
         }
 
-        cout << "\nCate muchii va avea graful? ";
-        cin >> input.m;
-        if (input.m < 1)
+        while (true)
         {
-            cout << "\nMarime invalida.\n";
-            fail = 1;
-            return 1;
+            cout << "\nCate muchii va avea graful? ";
+            cin >> ig_input.m;
+            if (ig_input.m < 1)
+            {
+                cout << "\nMarime invalida, introduceti din nou.\n";
+            }
+            else
+                break;
         }
-        cout << "\n";
     }
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
-        fail = 1;
+        ig_fail = 1;
         return 1;
     }
     return 0;
 }
 
-int **graphAllocate()
+int **incidencyGraphAllocate()
 {
 
-    input.arr = (int **)malloc(input.m * input.v * sizeof(int *));
+    ig_input.arr = (int **)malloc(ig_input.m * ig_input.v * sizeof(int *));
 
-    if (input.arr == NULL)
+    if (ig_input.arr == NULL)
     {
         cout << "A eșuat alocarea memoriei pentru întregul tablou.";
-        fail = 1;
+        ig_fail = 1;
         return (NULL);
     }
 
-    for (int i = 0; i < input.m; i++)
+    for (int i = 0; i < ig_input.m; i++)
     {
-        input.arr[i] = (int *)malloc(input.v * sizeof(int));
-        if (input.arr[i] == NULL)
+        ig_input.arr[i] = (int *)malloc(ig_input.v * sizeof(int));
+        if (ig_input.arr[i] == NULL)
         {
             cout << "A eșuat alocarea memoriei pentru subtabloul " << i << " al tabloului bidimensional.";
-            fail = 1;
+            ig_fail = 1;
             return (NULL);
         }
     }
 
-    return (input.arr);
+    return (ig_input.arr);
 }
 
-void graphIntroduce()
+void incidencyGraphIntroduce()
 {
     int in, out;
-    for (int i = 0; i < input.m; i++)
+    for (int i = 0; i < ig_input.m; i++)
     {
         try
         {
-            if (isOriented)
+            while (true)
             {
-                cout << "Din care varf iese muchia " << i + 1 << "? ";
-            }
-            else
-                cout << "Ce varfuri uneste muchia " << i + 1 << "? ";
+                if (ig_isOriented)
+                {
+                    cout << "\nDin care varf iese muchia " << i + 1 << "? ";
+                }
+                else
+                    cout << "\nCe varfuri uneste muchia " << i + 1 << "? ";
 
-            cin >> out;
-            out--;
-            if (out >= input.v || out < 0)
-            {
-                cout << "\nNu exista varful dat.\n";
-                fail = 1;
-                return;
+                cin >> out;
+                out--;
+                if (out >= ig_input.v || out < 0)
+                {
+                    cout << "\nNu exista varful dat, introduceti din nou.\n";
+                }
+                else
+                    break;
             }
-
-            if (isOriented)
+            while (true)
             {
-                cout << "In care varf intra muchia " << i + 1 << "? ";
-            }
-            else
-                cout << ' ';
-            cin >> in;
-            in--;
-            if (in >= input.v || in < 0)
-            {
-                cout << "\nNu exista varful dat.\n";
-                fail = 1;
-                return;
+                if (ig_isOriented)
+                {
+                    cout << "\nIn care varf intra muchia " << i + 1 << "? ";
+                }
+                else
+                    cout << ' ';
+                cin >> in;
+                in--;
+                if (in >= ig_input.v || in < 0)
+                {
+                    cout << "\nNu exista varful dat, introduceti din nou\n";
+                }
+                else
+                    break;
             }
         }
         catch (std::ios_base::failure const &ex)
         {
             cout << "\nValoare diferita de int.\n";
-            fail = 1;
+            ig_fail = 1;
             return;
         }
 
-        for (int j = 0; j < input.v; j++)
+        for (int j = 0; j < ig_input.v; j++)
         {
             if (j == in)
             {
-                input.arr[i][j] = 1;
+                ig_input.arr[i][j] = 1;
             }
-            else if (j == out && isOriented)
+            else if (j == out && ig_isOriented)
             {
-                input.arr[i][j] = -1;
+                ig_input.arr[i][j] = -1;
             }
-            else if (j == out && !isOriented)
+            else if (j == out && !ig_isOriented)
             {
-                input.arr[i][j] = 1;
+                ig_input.arr[i][j] = 1;
             }
             else
-                input.arr[i][j] = 0;
+                ig_input.arr[i][j] = 0;
         }
     }
 }
 
-void graphPrint()
+void incidencyGraphPrint()
 {
-    cout<< "\nGraful obtinut:\n";
+    cout << "\nGraful obtinut:\n";
     cout << "\t";
-    for (int i = 0; i < input.v; i++)
+    for (int i = 0; i < ig_input.v; i++)
     {
         cout << i + 1 << '\t';
     }
     cout << "\n";
-    for (int i = 0; i < input.v; i++)
+    for (int i = 0; i < ig_input.v; i++)
     {
         cout << "\t_";
     }
     cout << "\n";
 
-    for (int i = 0; i < input.m; i++)
+    for (int i = 0; i < ig_input.m; i++)
     {
         cout << i + 1 << "|\t";
-        for (int j = 0; j < input.v; j++)
+        for (int j = 0; j < ig_input.v; j++)
         {
-            cout << input.arr[i][j] << '\t';
+            cout << ig_input.arr[i][j] << '\t';
         }
         cout << "\n";
     }
@@ -171,21 +180,38 @@ int incidencyMatrixGraph()
 {
     cin.exceptions(std::ios_base::failbit);
 
-    cout << "\nEste orientat graful dat? (1/0)\n";
-    cin >> isOriented;
+    try
+    {
+        while (true)
+        {
+            cout << "\nEste orientat graful dat? (1/0)\n";
+            cin >> ig_isOriented;
+            if (ig_isOriented != 1 && ig_isOriented != 0)
+            {
+                cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
+            }
+            else
+                break;
+        }
+    }
+    catch (std::ios_base::failure const &ex)
+    {
+        cout << "\nValoare diferita de int.\n";
+        return 0;
+    }
 
-    getGraphShape();
-    if (fail)
+    getIncidencyGraphShape();
+    if (ig_fail)
         return (0);
 
-    input.arr = graphAllocate();
-    if (fail)
+    ig_input.arr = incidencyGraphAllocate();
+    if (ig_fail)
         return (0);
 
-    graphIntroduce();
-    if (fail)
+    incidencyGraphIntroduce();
+    if (ig_fail)
         return (0);
 
-    graphPrint();
+    incidencyGraphPrint();
     return (1);
 }

@@ -7,25 +7,33 @@ using namespace std;
 int main()
 {
     int type;
-    cout << "Alegeti modul de reprezentare al grafului:\n";
-    cout << "1 - Matrice de incidenta\n";
-    cout << "2 - Matrice de adiacenta\n";
-    cout << "3 - Lista de adiacenta\n";
-    cin >> type;
+    bool done = false;
 
-    switch (type)
+    cout << "Alegeti modul de reprezentare al grafului:\n";
+    while (!done)
     {
-    case 1:
-        incidencyMatrixGraph();
-        break;
-    case 2:
-        adjacencyMatrixGraph();
-        break;
-    case 3:
-        adjacencyListGraph();
-        break;
-    default:
-        cout << "Valoare invalida.";
+        cout << "1 - Matrice de incidenta\n";
+        cout << "2 - Matrice de adiacenta\n";
+        cout << "3 - Lista de adiacenta\n";
+        cin >> type;
+
+        switch (type)
+        {
+        case 1:
+            incidencyMatrixGraph();
+            done = true;
+            break;
+        case 2:
+            adjacencyMatrixGraph();
+            done = true;
+            break;
+        case 3:
+            adjacencyListGraph();
+            done = true;
+            break;
+        default:
+            cout << "\nValoare invalida, introduceti din nou.\n";
+        }
     }
 
     return (0);
