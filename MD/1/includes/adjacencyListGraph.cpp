@@ -1,83 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include "classes.h"
 
 using namespace std;
 
-struct node
-{
-    int data;
-    node *next;
-};
-
-class linked_list
-{
-private:
-    node *head, *tail;
-
-public:
-    linked_list()
-    {
-        head = NULL;
-        tail = NULL;
-    }
-
-    void add_node(int n)
-    {
-        node *tmp = new node;
-        tmp->data = n;
-        tmp->next = NULL;
-
-        if (head == NULL)
-        {
-            head = tmp;
-            tail = tmp;
-        }
-        else
-        {
-            tail->next = tmp;
-            tail = tail->next;
-        }
-    }
-
-    void print_list()
-    {
-        node *tmp = new node;
-        tmp = head;
-        while (tmp->next != NULL)
-        {
-            cout << tmp->data << ' ';
-            tmp = tmp->next;
-        }
-        cout << tmp->data << ' ';
-        tmp = tmp->next;
-    }
-
-    bool isPresent(int data)
-    {
-        node *tmp = new node;
-        tmp = head;
-        while (tmp != NULL)
-        {
-            if (tmp->data == data)
-                return true;
-            tmp = tmp->next;
-        }
-        return false;
-    }
-};
-
-class graphList
-{
-public:
-    int v;
-    int isOriented;
-    linked_list graphList[100];
-};
-
 graphList al_input;
 
-int listFail = 0;
+int al_fail = 0;
 
 void graphListAllocate()
 {
@@ -100,7 +30,7 @@ void graphListAllocate()
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
-        listFail = 1;
+        al_fail = 1;
         return;
     }
 }
@@ -139,7 +69,7 @@ void graphListIntroduce()
         catch (std::ios_base::failure const &ex)
         {
             cout << "\nValoare diferita de int.\n";
-            listFail = 1;
+            al_fail = 1;
             return;
         }
     }
@@ -161,6 +91,16 @@ void graphListPrint()
     }
 }
 
+void modifyList()
+{
+
+    int mod;
+    cout << "\nCare varf doriti sa-l modificati? ";
+    cin >> mod;
+    mod--;
+    al_input.graphList[mod].selectOperation(al_input, mod);
+}
+
 graphList adjacencyListGraph()
 {
     cin.exceptions(std::ios_base::failbit);
@@ -178,24 +118,39 @@ graphList adjacencyListGraph()
             else
                 break;
         }
+
+        graphListAllocate();
+        if (!al_fail)
+        {
+            graphListIntroduce();
+            if (!al_fail)
+            {
+
+                graphListPrint();
+            }
+        }
+
+        int change;
+        while (true)
+        {
+            cout << "\nDoriti sa modificati vre-un element in graf? (1/0)\n";
+            cin >> change;
+            if (change != 1 && change != 0)
+            {
+                cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
+            }
+            else
+            {
+                modifyList();
+                graphListPrint();
+                break;
+            }
+        }
     }
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
-        return ;
     }
-
-    graphListAllocate();
-    if (listFail)
-        return;
-    graphListIntroduce();
-
-    if (listFail)
-        return;
-
-    graphListPrint();
-    if (listFail)
-        return;
 
     return al_input;
 }

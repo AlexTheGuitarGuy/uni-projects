@@ -1,19 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include "classes.h"
 
 using namespace std;
-class incidencyMatrix
-{
-public:
-    int v;
-    int m;
-    int isOriented;
-    int **arr;
-};
+
 incidencyMatrix im_input;
 
-int ig_fail = 0;
+int im_fail = 0;
 
 int getIncidencyMatrixShape()
 {
@@ -48,7 +42,7 @@ int getIncidencyMatrixShape()
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
-        ig_fail = 1;
+        im_fail = 1;
         return 1;
     }
     return 0;
@@ -62,7 +56,7 @@ int **incidencyMatrixAllocate()
     if (im_input.arr == NULL)
     {
         cout << "A eșuat alocarea memoriei pentru întregul tablou.";
-        ig_fail = 1;
+        im_fail = 1;
         return (NULL);
     }
 
@@ -72,7 +66,7 @@ int **incidencyMatrixAllocate()
         if (im_input.arr[i] == NULL)
         {
             cout << "A eșuat alocarea memoriei pentru subtabloul " << i << " al tabloului bidimensional.";
-            ig_fail = 1;
+            im_fail = 1;
             return (NULL);
         }
     }
@@ -126,7 +120,7 @@ void incidencyMatrixIntroduce()
         catch (std::ios_base::failure const &ex)
         {
             cout << "\nValoare diferita de int.\n";
-            ig_fail = 1;
+            im_fail = 1;
             return;
         }
 
@@ -198,21 +192,19 @@ incidencyMatrix incidencyMatrixGraph()
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
-        return;
+        im_fail = 1;
     }
 
     getIncidencyMatrixShape();
-    if (ig_fail)
-        return;
+    if (!im_fail)
+    {
 
-    im_input.arr = incidencyMatrixAllocate();
-    if (ig_fail)
-        return;
-
-    incidencyMatrixIntroduce();
-    if (ig_fail)
-        return;
-
+        im_input.arr = incidencyMatrixAllocate();
+        if (!im_fail)
+        {
+            incidencyMatrixIntroduce();
+        }
+    }
     incidencyMatrixPrint();
     return im_input;
 }

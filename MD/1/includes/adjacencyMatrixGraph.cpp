@@ -1,19 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include "classes.h"
 
 using namespace std;
 
-class adjacencyMatrix
-{
-public:
-    int v;
-    int isOriented;
-    int **arr;
-};
 adjacencyMatrix am_input;
 
-int ag_fail = 0;
+int am_fail = 0;
 
 int getAdjacencyMatrixShape()
 {
@@ -35,7 +29,7 @@ int getAdjacencyMatrixShape()
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
-        ag_fail = 1;
+        am_fail = 1;
         return 1;
     }
     return 0;
@@ -49,7 +43,7 @@ int **adjacencyMatrixAllocate()
     if (am_input.arr == NULL)
     {
         cout << "A eșuat alocarea memoriei pentru întregul tablou.";
-        ag_fail = 1;
+        am_fail = 1;
         return (NULL);
     }
 
@@ -59,7 +53,7 @@ int **adjacencyMatrixAllocate()
         if (am_input.arr[i] == NULL)
         {
             cout << "A eșuat alocarea memoriei pentru subtabloul " << i << " al tabloului bidimensional.";
-            ag_fail = 1;
+            am_fail = 1;
             return (NULL);
         }
     }
@@ -106,7 +100,7 @@ void adjacencyMatrixIntroduce()
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
-        ag_fail = 1;
+        am_fail = 1;
         return;
     }
 }
@@ -159,20 +153,18 @@ adjacencyMatrix adjacencyMatrixGraph()
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
-        return;
+        am_fail = 1;
     }
 
     getAdjacencyMatrixShape();
-    if (ag_fail)
-        return;
-
-    am_input.arr = adjacencyMatrixAllocate();
-    if (ag_fail)
-        return;
-
-    adjacencyMatrixIntroduce();
-    if (ag_fail)
-        return;
+    if (!am_fail)
+    {
+        am_input.arr = adjacencyMatrixAllocate();
+        if (!am_fail)
+        {
+            adjacencyMatrixIntroduce();
+        }
+    }
 
     adjacencyMatrixPrint();
     return am_input;

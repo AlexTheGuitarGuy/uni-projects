@@ -1,5 +1,5 @@
 #include <iostream>
-#include "includes/graphs.h"
+#include "includes/functions.h"
 #include <string>
 
 using namespace std;
