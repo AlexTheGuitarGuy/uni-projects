@@ -91,10 +91,6 @@ void adjacencyMatrixIntroduce()
                 break;
 
             am_input.arr[i][j] = 1;
-            if (!am_input.isOriented)
-            {
-                am_input.arr[j][i] = 1;
-            }
         }
     }
     catch (std::ios_base::failure const &ex)
@@ -132,19 +128,29 @@ void adjacencyMatrixPrint()
     cout << "\n";
 }
 
-adjacencyMatrix adjacencyMatrixGraph()
+void am_modify()
 {
-    cin.exceptions(std::ios_base::failbit);
+    
+}
+
+void am_shouldModify()
+{
+    int change;
 
     try
     {
         while (true)
         {
-            cout << "\nEste orientat graful dat? (1/0)\n";
-            cin >> am_input.isOriented;
-            if (am_input.isOriented != 1 && am_input.isOriented != 0)
+            cout << "\nDoriti sa modificati vre-un element in graf? (1/0)\n";
+            cin >> change;
+            if (change != 1 && change != 0)
             {
                 cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
+            }
+            else if (change == 1)
+            {
+                am_modify();
+                break;
             }
             else
                 break;
@@ -153,8 +159,12 @@ adjacencyMatrix adjacencyMatrixGraph()
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
-        am_fail = 1;
     }
+}
+
+adjacencyMatrix adjacencyMatrixGraph()
+{
+    cin.exceptions(std::ios_base::failbit);
 
     getAdjacencyMatrixShape();
     if (!am_fail)

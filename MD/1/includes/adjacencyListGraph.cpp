@@ -9,7 +9,7 @@ graphList al_input;
 
 int al_fail = 0;
 
-void graphListAllocate()
+void listAllocate()
 {
     try
     {
@@ -25,7 +25,7 @@ void graphListAllocate()
                 break;
         }
 
-        // graphList = (linked_list *)malloc(v * sizeof(linked_list));
+        // list = (linked_list *)malloc(v * sizeof(linked_list));
     }
     catch (std::ios_base::failure const &ex)
     {
@@ -35,7 +35,16 @@ void graphListAllocate()
     }
 }
 
-void graphListIntroduce()
+void addEnding()
+{
+    for (int i = 0; i < al_input.v; i++)
+    {
+        if (al_input.list[i].getTail()->data != 0)
+            al_input.list[i].push(0);
+    }
+}
+
+void listIntroduce()
 {
 
     for (int i = 0; i < al_input.v; i++)
@@ -59,10 +68,8 @@ void graphListIntroduce()
 
                 if (data != 0)
                 {
-                    if (!al_input.graphList[i].isPresent(data))
-                        al_input.graphList[i].add_node(data);
-                    if (!al_input.graphList[data - 1].isPresent(i + 1) && !al_input.isOriented)
-                        al_input.graphList[data - 1].add_node(i + 1);
+                    if (!al_input.list[i].isPresent(data))
+                        al_input.list[i].push(data);
                 }
             }
         }
@@ -74,63 +81,51 @@ void graphListIntroduce()
         }
     }
 
-    for (int i = 0; i < al_input.v; i++)
-    {
-        al_input.graphList[i].add_node(0);
-    }
+    addEnding();
 }
 
-void graphListPrint()
+void listPrint()
 {
     cout << "\nGraful rezultant:\n";
     for (int i = 0; i < al_input.v; i++)
     {
         cout << i + 1 << " -> ";
-        al_input.graphList[i].print_list();
+        al_input.list[i].print_list();
+
         cout << '\n';
     }
 }
 
-void modifyList()
+void list_modify()
 {
 
     int mod;
-    cout << "\nCare varf doriti sa-l modificati? ";
-    cin >> mod;
-    mod--;
-    al_input.graphList[mod].selectOperation(al_input, mod);
+
+    while (true)
+    {
+        cout << "\nCare varf doriti sa-l modificati? (0 pentru a iesi) ";
+        cin >> mod;
+
+        if (mod == 0)
+            return;
+        else if (mod > al_input.v)
+        {
+            cout << "\nValoare invalida.\n";
+            continue;
+        }
+        mod--;
+        al_input.list[mod].selectOperation(al_input.v);
+        addEnding();
+        listPrint();
+    }
 }
 
-graphList adjacencyListGraph()
+void list_shouldModify()
 {
-    cin.exceptions(std::ios_base::failbit);
+    int change;
 
     try
     {
-        while (true)
-        {
-            cout << "\nEste orientat graful dat? (1/0)\n";
-            cin >> al_input.isOriented;
-            if (al_input.isOriented != 1 && al_input.isOriented != 0)
-            {
-                cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
-            }
-            else
-                break;
-        }
-
-        graphListAllocate();
-        if (!al_fail)
-        {
-            graphListIntroduce();
-            if (!al_fail)
-            {
-
-                graphListPrint();
-            }
-        }
-
-        int change;
         while (true)
         {
             cout << "\nDoriti sa modificati vre-un element in graf? (1/0)\n";
@@ -139,18 +134,35 @@ graphList adjacencyListGraph()
             {
                 cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
             }
-            else
+            else if (change == 1)
             {
-                modifyList();
-                graphListPrint();
+                list_modify();
                 break;
             }
+            else
+                break;
         }
     }
     catch (std::ios_base::failure const &ex)
     {
         cout << "\nValoare diferita de int.\n";
     }
+}
 
+graphList adjacencyListGraph()
+{
+    cin.exceptions(std::ios_base::failbit);
+
+    listAllocate();
+    if (!al_fail)
+    {
+        listIntroduce();
+        if (!al_fail)
+        {
+            listPrint();
+        }
+    }
+
+    list_shouldModify();
     return al_input;
 }
