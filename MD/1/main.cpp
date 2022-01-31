@@ -9,7 +9,7 @@ int main()
     int type;
     bool done = false;
 
-    cout << "Alegeti modul de reprezentare al grafului:\n";
+    cout << "\nAlegeti modul de reprezentare al grafului:\n";
     while (!done)
     {
         cout << "1 - Matrice de incidenta\n";

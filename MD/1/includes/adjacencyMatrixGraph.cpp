@@ -7,40 +7,6 @@ using namespace std;
 
 adjacencyMatrix am_input;
 
-void am_modify()
-{
-    return;
-}
-
-void am_shouldModify()
-{
-    int change;
-
-    try
-    {
-        while (true)
-        {
-            cout << "\nDoriti sa modificati vre-un element in graf? (1/0)\n";
-            cin >> change;
-            if (change != 1 && change != 0)
-            {
-                cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
-            }
-            else if (change == 1)
-            {
-                am_modify();
-                break;
-            }
-            else
-                break;
-        }
-    }
-    catch (std::ios_base::failure const &ex)
-    {
-        cout << "\nValoare diferita de int.\n";
-    }
-}
-
 adjacencyMatrix adjacencyMatrixGraph()
 {
     cin.exceptions(std::ios_base::failbit);
@@ -48,7 +14,7 @@ adjacencyMatrix adjacencyMatrixGraph()
     am_input.getShape();
     if (!am_input.fail)
     {
-        am_input.allocate();
+        am_input.arr = am_input.allocate();
         if (!am_input.fail)
         {
             am_input.introduce();
@@ -56,5 +22,7 @@ adjacencyMatrix adjacencyMatrixGraph()
                 am_input.print();
         }
     }
+
+    am_input.shouldModify();
     return am_input;
 }

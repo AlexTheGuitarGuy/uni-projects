@@ -2,8 +2,6 @@
 #include <iostream>
 
 using namespace std;
-
-// adjacency list classes and functions
 struct node
 {
     int data;

@@ -173,4 +173,14 @@ public:
         }
         cout << "\n";
     }
+
+    
+    void freeGraph()
+    {
+        for (int i = 0; i < v; i++)
+        {
+            free(arr[i]);
+        }
+        free(arr);
+    }
 };
