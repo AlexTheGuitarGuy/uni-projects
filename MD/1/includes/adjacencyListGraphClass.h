@@ -112,7 +112,8 @@ public:
         tmp = head;
 
         int i;
-        for (i = 0; tmp != NULL; i++, tmp = tmp->next);
+        for (i = 0; tmp != NULL; i++, tmp = tmp->next)
+            ;
 
         return (i);
     }
@@ -149,7 +150,7 @@ public:
                 continue;
             }
             tmp = goToIndex(n);
-                done = true;
+            done = true;
         }
 
         done = false;
@@ -278,31 +279,148 @@ public:
     }
 };
 
-class graphList
+class adjacencyList
 {
 public:
     int v;
+    bool fail;
     linked_list list[100];
-};
 
-// adjacency matrix classes
+    void allocate()
+    {
+        try
+        {
+            while (true)
+            {
+                cout << "\nCate varfuri va avea graful? ";
+                cin >> v;
+                if (v < 1)
+                {
+                    cout << "\nMarime invalida, introduceti din nou.\n";
+                }
+                else
+                    break;
+            }
+        }
+        catch (std::ios_base::failure const &ex)
+        {
+            cout << "\nValoare diferita de int.\n";
+            fail = true;
+            return;
+        }
+    }
 
-class adjacencyMatrix
-{
-public:
-    int v;
-    int **arr;
+    void addEnding()
+    {
+        for (int i = 0; i < v; i++)
+        {
+            if (list[i].getTail()->data != 0)
+                list[i].push(0);
+        }
+    }
 
-    
-};
+    void introduce()
+    {
 
-// incidency matrix classes
+        for (int i = 0; i < v; i++)
+        {
+            int data = 1;
+            try
+            {
+                cout << "\nCe varfuri se unesc cu varful " << i + 1 << "? (introduceti numere separate sau introduceti 0 pentru a trece la urmatorul)\n";
+                while (data != 0)
+                {
+                    while (true)
+                    {
+                        cin >> data;
+                        if (data < 0 || data > v)
+                        {
+                            cout << "\nValoare invalida, introduceti din nou\n";
+                        }
+                        else
+                            break;
+                    }
 
-class incidencyMatrix
-{
-public:
-    int v;
-    int m;
-    int isOriented;
-    int **arr;
+                    if (data != 0)
+                    {
+                        if (!list[i].isPresent(data))
+                            list[i].push(data);
+                    }
+                }
+            }
+            catch (std::ios_base::failure const &ex)
+            {
+                cout << "\nValoare diferita de int.\n";
+                fail = true;
+                return;
+            }
+        }
+
+        addEnding();
+    }
+
+    void print()
+    {
+        cout << "\nGraful rezultant:\n";
+        for (int i = 0; i < v; i++)
+        {
+            cout << i + 1 << " -> ";
+            list[i].print_list();
+
+            cout << '\n';
+        }
+    }
+
+    void modify()
+    {
+
+        int mod;
+
+        while (true)
+        {
+            cout << "\nCare varf doriti sa-l modificati? (0 pentru a iesi) ";
+            cin >> mod;
+
+            if (mod == 0)
+                return;
+            else if (mod > v)
+            {
+                cout << "\nValoare invalida.\n";
+                continue;
+            }
+            mod--;
+            list[mod].selectOperation(v);
+            addEnding();
+            print();
+        }
+    }
+
+    void shouldModify()
+    {
+        int change;
+
+        try
+        {
+            while (true)
+            {
+                cout << "\nDoriti sa modificati vre-un element in graf? (1/0)\n";
+                cin >> change;
+                if (change != 1 && change != 0)
+                {
+                    cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
+                }
+                else if (change == 1)
+                {
+                    modify();
+                    break;
+                }
+                else
+                    break;
+            }
+        }
+        catch (std::ios_base::failure const &ex)
+        {
+            cout << "\nValoare diferita de int.\n";
+        }
+    }
 };
