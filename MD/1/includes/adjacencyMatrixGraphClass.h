@@ -51,11 +51,34 @@ public:
         for (int i = 0; i < v; i++)
             tmp[i] = new int[v];
 
-        for (int i = 0; i < v -1; i++)
+        for (int i = 0; i < v - 1; i++)
         {
-            for (int j = 0; j < v -1; j++)
+            for (int j = 0; j < v - 1; j++)
             {
                 tmp[i][j] = arr[i][j];
+            }
+        }
+        return (tmp);
+    }
+
+    int **reallocate(int del)
+    {
+        int **tmp = new int *[v];
+        for (int i = 0; i < v; i++)
+            tmp[i] = new int[v];
+
+        for (int i = 0; i < v; i++)
+        {
+            for (int j = 0; j < v; j++)
+            {
+                if (i >= del && j < del)
+                    tmp[i][j] = arr[i + 1][j];
+                if (i < del && j >= del)
+                    tmp[i][j] = arr[i][j + 1];
+                if (i < del && j < del)
+                    tmp[i][j] = arr[i][j];
+                if (i >= del && j >= del)
+                    tmp[i][j] = arr[i + 1][j + 1];
             }
         }
         return (tmp);
@@ -143,13 +166,18 @@ public:
 
         try
         {
-            cout << "\nCate varfuri doriti sa adaugati?\n";
+            cout << "\nCate varfuri doriti sa adaugati? (0 pentru a iesi)\n";
             cin >> add;
-            if (add >= 0)
+            if (add == 0)
+                return;
+            else if (add >= 0)
             {
-                v += add;
-                arr = reallocate();
-                initialize(arr);
+                for (; add > 0; add--)
+                {
+                    v++;
+                    arr = reallocate();
+                    initialize(arr);
+                }
             }
             else
             {
@@ -163,51 +191,59 @@ public:
         }
     }
 
-    /*void ignoreInit(int del, int **tmp)
+    void deleteElem()
     {
-        int ignorei = 0;
-        int ignorej = 0;
-        for (int i = 0; i < v; i++)
-        {
-            for (int j = 0; j < v; j++)
-            {
-                if (i >= del)
-                    ignorei = 1;
-                else
-                    ignorei = 0;
-                if (j >= del)
-                    ignorej = 1;
-                else
-                    ignorej = 0;
-                if (arr[i][j] == 1)
-                    tmp[i][j] == 1;
-            }
-        }
-    }*/
-
-    /*void deleteElem()
-    {
-        int del;
-        int **tmp;
+        int del,
+            choice,
+            **tmp,
+            i, j;
         try
         {
-            //cout << "\nDoriti sa stergeti legaturi sau varfuri? (1/2)";
-            cout << "\nCe varf doriti sa stergeti?\n";
-            cin >> del;
-            del--;
-            v--;
-            tmp = allocate();
-            print();
-            initialize(tmp);
-            ignoreInit(del, tmp);
-            arr = tmp;
+            cout << "\nDoriti sa stergeti legaturi sau varfuri? (1/2/0) ";
+            cin >> choice;
+            switch (choice)
+            {
+            case 1:
+                cout << "\nCe legaturi doriti sa stergeti? (0 pentru a iesi) \n";
+                while (true)
+                {
+                    cin >> i >> j;
+                    if (i == 0 || j == 0)
+                        return;
+                    i--;
+                    j--;
+
+                    if (i < 0 || j < 0 || i >= v || j >= v)
+                    {
+                        cout << "\nValoare invalida, introduceti din nou.\n";
+                    }
+                    else
+                    {
+                        arr[i][j] = 0;
+                    }
+                    cout << "_\n";
+                }
+                break;
+            case 2:
+                cout << "\nCe varf doriti sa stergeti? (0 pentru a iesi)\n";
+                cin >> del;
+                if (del == 0)
+                    return;
+                del--;
+                v--;
+                arr = reallocate(del);
+                initialize(arr);
+                break;
+            case 0:
+                return;
+            }
         }
         catch (std::ios_base::failure const &ex)
         {
             cout << "\nValoare diferita de int.\n";
             return;
         }
-    }*/
+    }
 
     void selectOperation()
     {
@@ -235,7 +271,7 @@ public:
                     print();
                     break;
                 case 3:
-                    // deleteElem();
+                    deleteElem();
                     print();
                     break;
                 case 0:
