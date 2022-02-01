@@ -38,51 +38,27 @@ public:
     {
         int **arr;
 
-        arr = (int **)malloc(v * v * sizeof(int *));
-
-        if (arr == NULL)
-        {
-            cout << "A eșuat alocarea memoriei pentru întregul tablou.";
-            fail = true;
-            return (NULL);
-        }
-
+        arr = new int *[v];
         for (int i = 0; i < v; i++)
-        {
-            arr[i] = (int *)malloc(v * sizeof(int));
-            if (arr[i] == NULL)
-            {
-                cout << "A eșuat alocarea memoriei pentru subtabloul " << i << " al tabloului bidimensional.";
-                fail = true;
-                return (NULL);
-            }
-        }
+            arr[i] = new int[v];
 
         return (arr);
     }
 
-    void reallocate(int **arr)
+    int **reallocate()
     {
-        arr = (int **)realloc(arr, v * v * sizeof(int *));
-
-        if (arr == NULL)
-        {
-            cout << "A eșuat alocarea memoriei pentru întregul tablou.";
-            fail = true;
-            return ;
-        }
-
+        int **tmp = new int *[v];
         for (int i = 0; i < v; i++)
+            tmp[i] = new int[v];
+
+        for (int i = 0; i < v -1; i++)
         {
-            arr[i] = (int *)realloc(arr[i], v * sizeof(int));
-            if (arr[i] == NULL)
+            for (int j = 0; j < v -1; j++)
             {
-                cout << "A eșuat alocarea memoriei pentru subtabloul " << i << " al tabloului bidimensional.";
-                fail = true;
-                return;
+                tmp[i][j] = arr[i][j];
             }
         }
-
+        return (tmp);
     }
 
     void initialize(int **arr)
@@ -163,7 +139,6 @@ public:
 
     void add()
     {
-
         int add = 0;
 
         try
@@ -173,7 +148,8 @@ public:
             if (add >= 0)
             {
                 v += add;
-                reallocate(arr);
+                arr = reallocate();
+                initialize(arr);
             }
             else
             {
@@ -187,7 +163,7 @@ public:
         }
     }
 
-    void ignoreInit(int del, int **tmp)
+    /*void ignoreInit(int del, int **tmp)
     {
         int ignorei = 0;
         int ignorej = 0;
@@ -207,9 +183,9 @@ public:
                     tmp[i][j] == 1;
             }
         }
-    }
+    }*/
 
-    void deleteElem()
+    /*void deleteElem()
     {
         int del;
         int **tmp;
@@ -231,7 +207,7 @@ public:
             cout << "\nValoare diferita de int.\n";
             return;
         }
-    }
+    }*/
 
     void selectOperation()
     {
@@ -259,7 +235,7 @@ public:
                     print();
                     break;
                 case 3:
-                    deleteElem();
+                    // deleteElem();
                     print();
                     break;
                 case 0:
