@@ -322,8 +322,8 @@ public:
     {
         for (int i = 0; i < v; i++)
         {
-            free(arr[i]);
+            delete [] arr[i];
         }
-        free(arr);
+        delete [] arr;
     }
 };
