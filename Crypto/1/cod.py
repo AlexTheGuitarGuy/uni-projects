@@ -5,6 +5,7 @@ import sys
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 latin_alphabet = 'ABCDEFGHIKLMNOPQRSTVXYZ'
 
+
 def isEnglish(s):
     try:
         s.encode(encoding='utf-8').decode('ascii')
@@ -13,11 +14,12 @@ def isEnglish(s):
     else:
         return True
 
+
 def caesarLoop(string_input, op, alphabet_key):
     done = False
     while not done:
 
-        key = int(input("Introduceti cheia(1->25): "))
+        key = int(input("Introduceti cheia(1->25 sau 26 pentru brute force): "))
 
         if (key > 0 and key < 26):
 
@@ -31,6 +33,20 @@ def caesarLoop(string_input, op, alphabet_key):
                     str(location_of_character) + op + str(key)) % 26
                 string_res += alphabet_key[new_location]
 
+            done = True
+        elif (key == 26):
+
+            string_res = ""
+            for key in range(1, 25):
+                string_res += '\n'
+                for i in range(len(string_input)):
+
+                    character = string_input[i]
+                    location_of_character = alphabet_key.find(character)
+                    new_location = eval(
+                        str(location_of_character) + op + str(key)) % 26
+                    string_res += alphabet_key[new_location]
+            
             done = True
         else:
             print(
@@ -53,18 +69,21 @@ def getValidInput(message):
 
 def caesar(op):
 
-    string_input = getValidInput("introduceti o propozitie exclusiv alfabetica: ")
+    string_input = getValidInput(
+        "introduceti o propozitie exclusiv alfabetica: ")
 
     string_res = caesarLoop(string_input, op, alphabet)
 
     print(string_res)
+    print
 
 
 def getKey():
     done = False
 
     while not done:
-        user_key = getValidInput("Introduceti o cheie compusa din cel putin 7 litere ale alfabetului latin: ")
+        user_key = getValidInput(
+            "Introduceti o cheie compusa din cel putin 7 litere ale alfabetului latin: ")
         key = ""
 
         for char in user_key:
@@ -75,10 +94,10 @@ def getKey():
                     "Cheia trebuie sa contina doar litere din alfabetul latin si cel putin 7, introduceti din nou.")
                 done = False
                 break
-    
+
     for char in user_key:
-            if char in alphabet and char not in key:
-                key += char
+        if char in alphabet and char not in key:
+            key += char
 
     for char in alphabet:
         if char not in key:
@@ -88,11 +107,13 @@ def getKey():
 
 
 def caesarKey(op):
-    string_input = getValidInput("introduceti o propozitie exclusiv alfabetica: ")
+    string_input = getValidInput(
+        "introduceti o propozitie exclusiv alfabetica: ")
 
     key = getKey()
 
     print(caesarLoop(string_input, op, key))
+
 
 def quit():
     print("iesire")
@@ -104,10 +125,10 @@ def menu():
 
     choice = input("""
     
-    1: Cezar encriptare
+    1: Cezar criptare
     2: Cezar decriptare
-    3: Cezar + cuvant cheie
-    4: Cezar + cuvant cheie
+    3: Cezar + cuvant cheie criptare
+    4: Cezar + cuvant cheie decriptare
     0: Iesire din meniu
 
     Alegeti o optiune
