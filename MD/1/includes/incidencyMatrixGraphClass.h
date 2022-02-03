@@ -204,7 +204,9 @@ public:
 
     void introduce(int i, int del)
     {
+        v++;
         initialize(i);
+        v--;
         int in, out;
 
         cout << "\nCe varfuri uneste muchia " << i + 1 << "? (introduceti perechi)\n";
@@ -298,7 +300,6 @@ public:
 
     void add()
     {
-        print();
         int add;
         int choice;
 
@@ -375,7 +376,6 @@ public:
         {
             for (int j = 0; j < v + 1; j++)
             {
-                cout << arr[i + 1][j] << '\n';
                 if (i >= del)
                     tmp[i][j] = arr[i + 1][j];
                 else
