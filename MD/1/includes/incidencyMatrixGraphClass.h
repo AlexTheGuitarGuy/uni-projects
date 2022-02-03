@@ -5,63 +5,11 @@ using namespace std;
 
 class incidencyMatrix
 {
-public:
+private:
     int v;
     int m;
     int **arr;
     int isOriented;
-    bool fail = false;
-
-    int getShape()
-    {
-
-        try
-        {
-            while (true)
-            {
-
-                cout << "\nCate varfuri va avea graful? ";
-                cin >> v;
-                if (v < 1)
-                {
-                    cout << "\nMarime invalida, introduceti din nou.\n";
-                }
-                else
-                    break;
-            }
-
-            while (true)
-            {
-                cout << "\nCate muchii va avea graful? ";
-                cin >> m;
-                if (m < 1)
-                {
-                    cout << "\nMarime invalida, introduceti din nou.\n";
-                }
-                else
-                    break;
-            }
-        }
-        catch (std::ios_base::failure const &ex)
-        {
-            cout << "\nValoare diferita de int.\n";
-            fail = true;
-            return 1;
-        }
-        return 0;
-    }
-
-    int **allocate()
-    {
-
-        int **arr;
-
-        arr = new int *[m];
-        for (int i = 0; i < m; i++)
-            arr[i] = new int[v];
-
-        return (arr);
-    }
 
     int **vreallocate()
     {
@@ -109,49 +57,7 @@ public:
         }
     }
 
-    void introduce()
-    {
-        initialize();
-        int in, out;
-        for (int i = 0; i < m; i++)
-        {
-            cout << "\nCe varfuri uneste muchia " << i + 1 << "? (introduceti perechi)\n";
-            try
-            {
-                while (true)
-                {
-
-                    cin >> out >> in;
-                    in--;
-                    out--;
-                    if (in >= v || in < 0 || out >= v || out < 0)
-                    {
-                        cout << "\nNu exista varful dat, introduceti din nou.\n";
-                    }
-                    else
-                        break;
-                }
-            }
-            catch (std::ios_base::failure const &ex)
-            {
-                cout << "\nValoare diferita de int.\n";
-                fail = true;
-                return;
-            }
-
-            if (isOriented)
-            {
-                arr[i][out] = -1;
-            }
-            else if (!isOriented)
-            {
-                arr[i][out] = 1;
-            }
-            arr[i][in] = 1;
-        }
-    }
-
-    void initialize(int i)
+   void initialize(int i)
     {
 
         for (int j = 0; j < v; j++)
@@ -252,34 +158,7 @@ public:
             arr[i][in] = 1;
     }
 
-    void print()
-    {
-        cout << "\nGraful obtinut:\n";
-        cout << "\t";
-        for (int i = 0; i < v; i++)
-        {
-            cout << i + 1 << '\t';
-        }
-        cout << "\n";
-        for (int i = 0; i < v; i++)
-        {
-            cout << "\t_";
-        }
-        cout << "\n";
-
-        for (int i = 0; i < m; i++)
-        {
-            cout << i + 1 << "|\t";
-            for (int j = 0; j < v; j++)
-            {
-                cout << arr[i][j] << '\t';
-            }
-            cout << "\n";
-        }
-        cout << "\n";
-    }
-
-    void modify()
+   void modify()
     {
         while (true)
         {
@@ -482,6 +361,138 @@ public:
         }
     }
 
+    void freeGraph(int **arr)
+    {
+        for (int i = 0; i < v; i++)
+        {
+            delete[] arr[i];
+        }
+        delete[] arr;
+    }
+
+public:
+    bool fail = false;
+
+    int getShape()
+    {
+
+        try
+        {
+            while (true)
+            {
+
+                cout << "\nCate varfuri va avea graful? ";
+                cin >> v;
+                if (v < 1)
+                {
+                    cout << "\nMarime invalida, introduceti din nou.\n";
+                }
+                else
+                    break;
+            }
+
+            while (true)
+            {
+                cout << "\nCate muchii va avea graful? ";
+                cin >> m;
+                if (m < 1)
+                {
+                    cout << "\nMarime invalida, introduceti din nou.\n";
+                }
+                else
+                    break;
+            }
+        }
+        catch (std::ios_base::failure const &ex)
+        {
+            cout << "\nValoare diferita de int.\n";
+            fail = true;
+            return 1;
+        }
+        return 0;
+    }
+
+    int **allocate()
+    {
+
+        int **arr;
+
+        arr = new int *[m];
+        for (int i = 0; i < m; i++)
+            arr[i] = new int[v];
+
+        return (arr);
+    }
+
+    void introduce()
+    {
+        initialize();
+        int in, out;
+        for (int i = 0; i < m; i++)
+        {
+            cout << "\nCe varfuri uneste muchia " << i + 1 << "? (introduceti perechi)\n";
+            try
+            {
+                while (true)
+                {
+
+                    cin >> out >> in;
+                    in--;
+                    out--;
+                    if (in >= v || in < 0 || out >= v || out < 0)
+                    {
+                        cout << "\nNu exista varful dat, introduceti din nou.\n";
+                    }
+                    else
+                        break;
+                }
+            }
+            catch (std::ios_base::failure const &ex)
+            {
+                cout << "\nValoare diferita de int.\n";
+                fail = true;
+                return;
+            }
+
+            if (isOriented)
+            {
+                arr[i][out] = -1;
+            }
+            else if (!isOriented)
+            {
+                arr[i][out] = 1;
+            }
+            arr[i][in] = 1;
+        }
+    }
+
+    void print()
+    {
+        cout << "\nGraful obtinut:\n";
+        cout << "\t";
+        for (int i = 0; i < v; i++)
+        {
+            cout << i + 1 << '\t';
+        }
+        cout << "\n";
+        for (int i = 0; i < v; i++)
+        {
+            cout << "\t_";
+        }
+        cout << "\n";
+
+        for (int i = 0; i < m; i++)
+        {
+            cout << i + 1 << "|\t";
+            for (int j = 0; j < v; j++)
+            {
+                cout << arr[i][j] << '\t';
+            }
+            cout << "\n";
+        }
+        cout << "\n";
+    }
+
     void shouldModify()
     {
         int change;
@@ -511,12 +522,4 @@ public:
         }
     }
 
-    void freeGraph(int **arr)
-    {
-        for (int i = 0; i < v; i++)
-        {
-            delete[] arr[i];
-        }
-        delete[] arr;
-    }
 };

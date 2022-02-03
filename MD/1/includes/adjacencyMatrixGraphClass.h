@@ -5,45 +5,9 @@ using namespace std;
 
 class adjacencyMatrix
 {
-public:
+private:
     int v;
     int **arr;
-    bool fail = false;
-
-    void getShape()
-    {
-
-        try
-        {
-            while (true)
-            {
-                cout << "\nCate varfuri va avea graful? ";
-                cin >> v;
-                if (v < 1)
-                {
-                    cout << "\nMarime invalida, introduceti din nou.\n";
-                }
-                else
-                    break;
-            }
-        }
-        catch (std::ios_base::failure const &ex)
-        {
-            cout << "\nValoare diferita de int.\n";
-            fail = true;
-        }
-    }
-
-    int **allocate()
-    {
-        int **arr;
-
-        arr = new int *[v];
-        for (int i = 0; i < v; i++)
-            arr[i] = new int[v];
-
-        return (arr);
-    }
 
     int **reallocate()
     {
@@ -96,77 +60,13 @@ public:
         }
     }
 
-    void introduce()
-    {
-        initialize(arr);
-
-        int i, j;
-        try
-        {
-            cout << "Ce varfuri se unesc? (introduceti perechi separate sau introduceti 0 pentru a inceta)\n";
-            while (true)
-            {
-
-                cin >> i >> j;
-                if (i == 0 || j == 0)
-                {
-                    break;
-                }
-                i--;
-                j--;
-                cout << "_\n";
-
-                if ((i < 0 || j < 0) || (i >= v || j >= v))
-                {
-                    cout << "\nValoare invalida, introduceti din nou.\n";
-                    continue;
-                }
-
-                arr[i][j] = 1;
-            }
-        }
-        catch (std::ios_base::failure const &ex)
-        {
-            cout << "\nValoare diferita de int.\n";
-            fail = true;
-            return;
-        }
-    }
-
-    void print()
-    {
-        cout << "Graful obtinut:\n";
-        cout << "\t";
-        for (int i = 0; i < v; i++)
-        {
-            cout << i + 1 << '\t';
-        }
-        cout << "\n";
-        for (int i = 0; i < v; i++)
-        {
-            cout << "\t_";
-        }
-        cout << "\n";
-
-        for (int i = 0; i < v; i++)
-        {
-            cout << i + 1 << "|\t";
-            for (int j = 0; j < v; j++)
-            {
-                cout << arr[i][j] << '\t';
-            }
-            cout << "\n";
-        }
-        cout << "\n";
-    }
-
     void add()
     {
         int add = 0;
 
         try
         {
-            cout << "\nCate varfuri doriti sa adaugati? (0 pentru a iesi)\n";
+            std::cout << "\nCate varfuri doriti sa adaugati? (0 pentru a iesi)\n";
             cin >> add;
             if (add == 0)
                 return;
@@ -181,12 +81,12 @@ public:
             }
             else
             {
-                cout << "\nValoare invalida, introduceti din nou.\n";
+                std::cout << "\nValoare invalida, introduceti din nou.\n";
             }
         }
         catch (std::ios_base::failure const &ex)
         {
-            cout << "\nValoare diferita de int.\n";
+            std::cout << "\nValoare diferita de int.\n";
             return;
         }
     }
@@ -199,12 +99,12 @@ public:
             i, j;
         try
         {
-            cout << "\nDoriti sa stergeti legaturi sau varfuri? (1/2/0) ";
+            std::cout << "\nDoriti sa stergeti legaturi sau varfuri? (1/2/0) ";
             cin >> choice;
             switch (choice)
             {
             case 1:
-                cout << "\nCe legaturi doriti sa stergeti? (0 pentru a iesi) \n";
+                std::cout << "\nCe legaturi doriti sa stergeti? (0 pentru a iesi) \n";
                 while (true)
                 {
                     cin >> i >> j;
@@ -215,17 +115,17 @@ public:
 
                     if (i < 0 || j < 0 || i >= v || j >= v)
                     {
-                        cout << "\nValoare invalida, introduceti din nou.\n";
+                        std::cout << "\nValoare invalida, introduceti din nou.\n";
                     }
                     else
                     {
                         arr[i][j] = 0;
                     }
-                    cout << "_\n";
+                    std::cout << "_\n";
                 }
                 break;
             case 2:
-                cout << "\nCe varf doriti sa stergeti? (0 pentru a iesi)\n";
+                std::cout << "\nCe varf doriti sa stergeti? (0 pentru a iesi)\n";
                 cin >> del;
                 if (del == 0)
                     return;
@@ -240,7 +140,7 @@ public:
         }
         catch (std::ios_base::failure const &ex)
         {
-            cout << "\nValoare diferita de int.\n";
+            std::cout << "\nValoare diferita de int.\n";
             return;
         }
     }
@@ -253,12 +153,12 @@ public:
             bool done = false;
             while (!done)
             {
-                cout << "\nAlegeti operatiunea:\n";
+                std::cout << "\nAlegeti operatiunea:\n";
 
-                cout << "1. Modificare\n";
-                cout << "2. Adaugare\n";
-                cout << "3. Stergere\n";
-                cout << "0. Iesire\n";
+                std::cout << "1. Modificare\n";
+                std::cout << "2. Adaugare\n";
+                std::cout << "3. Stergere\n";
+                std::cout << "0. Iesire\n";
                 cin >> choice;
                 switch (choice)
                 {
@@ -278,15 +178,127 @@ public:
                     done = true;
                     break;
                 default:
-                    cout << "\nValoare diferita de diapazonul oferit, introduceti din nou.\n";
+                    std::cout << "\nValoare diferita de diapazonul oferit, introduceti din nou.\n";
                 }
             }
         }
         catch (std::ios_base::failure const &ex)
         {
-            cout << "\nValoare diferita de int.\n";
+            std::cout << "\nValoare diferita de int.\n";
             return;
         }
+    }
+
+    void freeGraph()
+    {
+        for (int i = 0; i < v; i++)
+        {
+            delete[] arr[i];
+        }
+        delete[] arr;
+    }
+
+public:
+
+    bool fail = false;
+
+    void getShape()
+    {
+
+        try
+        {
+            while (true)
+            {
+                std::cout << "\nCate varfuri va avea graful? ";
+                cin >> v;
+                if (v < 1)
+                {
+                    std::cout << "\nMarime invalida, introduceti din nou.\n";
+                }
+                else
+                    break;
+            }
+        }
+        catch (std::ios_base::failure const &ex)
+        {
+            std::cout << "\nValoare diferita de int.\n";
+            fail = true;
+        }
+    }
+
+    int **allocate()
+    {
+        int **arr;
+
+        arr = new int *[v];
+        for (int i = 0; i < v; i++)
+            arr[i] = new int[v];
+
+        return (arr);
+    }
+
+    void introduce()
+    {
+        initialize(arr);
+
+        int i, j;
+        try
+        {
+            std::cout << "Ce varfuri se unesc? (introduceti perechi separate sau introduceti 0 pentru a inceta)\n";
+            while (true)
+            {
+
+                cin >> i >> j;
+                if (i == 0 || j == 0)
+                {
+                    break;
+                }
+                i--;
+                j--;
+                std::cout << "_\n";
+
+                if ((i < 0 || j < 0) || (i >= v || j >= v))
+                {
+                    std::cout << "\nValoare invalida, introduceti din nou.\n";
+                    continue;
+                }
+
+                arr[i][j] = 1;
+            }
+        }
+        catch (std::ios_base::failure const &ex)
+        {
+            std::cout << "\nValoare diferita de int.\n";
+            fail = true;
+            return;
+        }
+    }
+
+    void print()
+    {
+        std::cout << "Graful obtinut:\n";
+        std::cout << "\t";
+        for (int i = 0; i < v; i++)
+        {
+            std::cout << i + 1 << '\t';
+        }
+        std::cout << "\n";
+        for (int i = 0; i < v; i++)
+        {
+            std::cout << "\t_";
+        }
+        std::cout << "\n";
+
+        for (int i = 0; i < v; i++)
+        {
+            std::cout << i + 1 << "|\t";
+            for (int j = 0; j < v; j++)
+            {
+                std::cout << arr[i][j] << '\t';
+            }
+            std::cout << "\n";
+        }
+        std::cout << "\n";
     }
 
     void shouldModify()
@@ -297,11 +309,11 @@ public:
         {
             while (true)
             {
-                cout << "\nDoriti sa modificati vre-un element in graf? (1/0)\n";
+                std::cout << "\nDoriti sa modificati vre-un element in graf? (1/0)\n";
                 cin >> change;
                 if (change != 1 && change != 0)
                 {
-                    cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
+                    std::cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
                 }
                 else if (change == 1)
                 {
@@ -314,16 +326,9 @@ public:
         }
         catch (std::ios_base::failure const &ex)
         {
-            cout << "\nValoare diferita de int.\n";
+            std::cout << "\nValoare diferita de int.\n";
         }
     }
 
-    void freeGraph()
-    {
-        for (int i = 0; i < v; i++)
-        {
-            delete [] arr[i];
-        }
-        delete [] arr;
-    }
+
 };

@@ -63,12 +63,12 @@ public:
         {
             while (tmp != NULL)
             {
-                cout << tmp->data << ' ';
+                std::cout << tmp->data << ' ';
                 tmp = tmp->next;
             }
         }
         else
-            cout << 0;
+            std::cout << 0;
     }
 
     bool isPresent(int data)
@@ -137,14 +137,14 @@ public:
         bool done = false;
         while (!done)
         {
-            cout << "\nCare element legat de varf doriti sa-l modificati? (0 pentru a iesi)\n";
+            std::cout << "\nCare element legat de varf doriti sa-l modificati? (0 pentru a iesi)\n";
             cin >> n;
             if (n == 0)
                 return;
             n--;
             if (n >= getLastIndex() - 1 || n < 0)
             {
-                cout << "\nNu exista elemente la pozitia data, introduceti din nou.\n";
+                std::cout << "\nNu exista elemente la pozitia data, introduceti din nou.\n";
                 continue;
             }
             tmp = goToIndex(n);
@@ -154,16 +154,16 @@ public:
         done = false;
         while (!done)
         {
-            cout << "\nCe varf se va afla la pozitia data? (0 pentru a iesi)\n";
+            std::cout << "\nCe varf se va afla la pozitia data? (0 pentru a iesi)\n";
             cin >> data;
             if (data == 0)
                 return;
             if (isPresent(data))
             {
-                cout << "\nElementul dat deja exista.";
+                std::cout << "\nElementul dat deja exista.";
             }
             else if (data < 0)
-                cout << "\nValoare invalida.\n";
+                std::cout << "\nValoare invalida.\n";
             else
             {
                 tmp->data = data;
@@ -178,7 +178,7 @@ public:
         node *tmp = new node;
         tmp = head;
         int data = 1, n;
-        cout << "\nCe varfuri se unesc cu varful dat? (introduceti numere separate sau introduceti 0 pentru a termina)\n";
+        std::cout << "\nCe varfuri se unesc cu varful dat? (introduceti numere separate sau introduceti 0 pentru a termina)\n";
         while (data != 0)
         {
             while (true)
@@ -186,7 +186,7 @@ public:
                 cin >> data;
                 if (data < 0 || data > v)
                 {
-                    cout << "\nValoare invalida, introduceti din nou\n";
+                    std::cout << "\nValoare invalida, introduceti din nou\n";
                 }
                 else if (data == 0)
                     break;
@@ -199,7 +199,7 @@ public:
                     }
                     else
                     {
-                        cout << "\nElementul dat deja este prezent, introduceti din nou.\n";
+                        std::cout << "\nElementul dat deja este prezent, introduceti din nou.\n";
                         break;
                     }
                     push(0);
@@ -216,14 +216,14 @@ public:
         int n, data;
         while (!done)
         {
-            cout << "\nCare e pozitia elementului pe care oriti sa-l stergeti? (0 pentru a iesi)\n";
+            std::cout << "\nCare e pozitia elementului pe care oriti sa-l stergeti? (0 pentru a iesi)\n";
             cin >> n;
             if (n == 0)
                 return;
             n--;
             if (n >= getLastIndex() - 1 || n < 0)
             {
-                cout << "Nu exista elemente la pozitia data, introduceti din nou.";
+                std::cout << "Nu exista elemente la pozitia data, introduceti din nou.";
                 continue;
             }
             if (n > 0)
@@ -245,12 +245,12 @@ public:
         try
         {
 
-            cout << "\nAlegeti operatiunea:\n";
+            std::cout << "\nAlegeti operatiunea:\n";
 
-            cout << "1. Modificare\n";
-            cout << "2. Adaugare\n";
-            cout << "3. Stergere\n";
-            cout << "4. Alegere varf\n";
+            std::cout << "1. Modificare\n";
+            std::cout << "2. Adaugare\n";
+            std::cout << "3. Stergere\n";
+            std::cout << "4. Alegere varf\n";
             cin >> choice;
             switch (choice)
             {
@@ -266,12 +266,12 @@ public:
             case 4:
                 break;
             default:
-                cout << "\nValoare diferita de diapazonul 1-4, introduceti din nou.\n";
+                std::cout << "\nValoare diferita de diapazonul 1-4, introduceti din nou.\n";
             }
         }
         catch (std::ios_base::failure const &ex)
         {
-            cout << "\nValoare diferita de int.\n";
+            std::cout << "\nValoare diferita de int.\n";
             return;
         }
     }
@@ -279,10 +279,44 @@ public:
 
 class adjacencyList
 {
-public:
-    int v;
-    bool fail;
+private:
     linked_list list[100];
+    int v;
+
+    void modify()
+    {
+
+        int mod;
+
+        while (true)
+        {
+            std::cout << "\nCare varf doriti sa-l modificati? (0 pentru a iesi) ";
+            cin >> mod;
+
+            if (mod == 0)
+                return;
+            else if (mod > v)
+            {
+                std::cout << "\nValoare invalida.\n";
+                continue;
+            }
+            mod--;
+            list[mod].selectOperation(v);
+            addEnding();
+            print();
+        }
+    }
+    void addEnding()
+    {
+        for (int i = 0; i < v; i++)
+        {
+            if (list[i].getTail()->data != 0)
+                list[i].push(0);
+        }
+    }
+
+public:
+    bool fail;
 
     void allocate()
     {
@@ -290,11 +324,11 @@ public:
         {
             while (true)
             {
-                cout << "\nCate varfuri va avea graful? ";
+                std::cout << "\nCate varfuri va avea graful? ";
                 cin >> v;
                 if (v < 1)
                 {
-                    cout << "\nMarime invalida, introduceti din nou.\n";
+                    std::cout << "\nMarime invalida, introduceti din nou.\n";
                 }
                 else
                     break;
@@ -302,18 +336,9 @@ public:
         }
         catch (std::ios_base::failure const &ex)
         {
-            cout << "\nValoare diferita de int.\n";
+            std::cout << "\nValoare diferita de int.\n";
             fail = true;
             return;
-        }
-    }
-
-    void addEnding()
-    {
-        for (int i = 0; i < v; i++)
-        {
-            if (list[i].getTail()->data != 0)
-                list[i].push(0);
         }
     }
 
@@ -325,7 +350,7 @@ public:
             int data = 1;
             try
             {
-                cout << "\nCe varfuri se unesc cu varful " << i + 1 << "? (introduceti numere separate sau introduceti 0 pentru a trece la urmatorul)\n";
+                std::cout << "\nCe varfuri se unesc cu varful " << i + 1 << "? (introduceti numere separate sau introduceti 0 pentru a trece la urmatorul)\n";
                 while (data != 0)
                 {
                     while (true)
@@ -333,7 +358,7 @@ public:
                         cin >> data;
                         if (data < 0 || data > v)
                         {
-                            cout << "\nValoare invalida, introduceti din nou\n";
+                            std::cout << "\nValoare invalida, introduceti din nou\n";
                         }
                         else
                             break;
@@ -348,7 +373,7 @@ public:
             }
             catch (std::ios_base::failure const &ex)
             {
-                cout << "\nValoare diferita de int.\n";
+                std::cout << "\nValoare diferita de int.\n";
                 fail = true;
                 return;
             }
@@ -359,37 +384,13 @@ public:
 
     void print()
     {
-        cout << "\nGraful rezultant:\n";
+        std::cout << "\nGraful rezultant:\n";
         for (int i = 0; i < v; i++)
         {
-            cout << i + 1 << " -> ";
+            std::cout << i + 1 << " -> ";
             list[i].print_list();
 
-            cout << '\n';
-        }
-    }
-
-    void modify()
-    {
-
-        int mod;
-
-        while (true)
-        {
-            cout << "\nCare varf doriti sa-l modificati? (0 pentru a iesi) ";
-            cin >> mod;
-
-            if (mod == 0)
-                return;
-            else if (mod > v)
-            {
-                cout << "\nValoare invalida.\n";
-                continue;
-            }
-            mod--;
-            list[mod].selectOperation(v);
-            addEnding();
-            print();
+            std::cout << '\n';
         }
     }
 
@@ -401,11 +402,11 @@ public:
         {
             while (true)
             {
-                cout << "\nDoriti sa modificati vre-un element in graf? (1/0)\n";
+                std::cout << "\nDoriti sa modificati vre-un element in graf? (1/0)\n";
                 cin >> change;
                 if (change != 1 && change != 0)
                 {
-                    cout << "\nValoare diferita de diapazonul oferit, introduceti din nou.\n";
+                    std::cout << "\nValoare diferita de diapazonul oferit, introduceti din nou.\n";
                 }
                 else if (change == 1)
                 {
@@ -418,7 +419,7 @@ public:
         }
         catch (std::ios_base::failure const &ex)
         {
-            cout << "\nValoare diferita de int.\n";
+            std::cout << "\nValoare diferita de int.\n";
         }
     }
 };
