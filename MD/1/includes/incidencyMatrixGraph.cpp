@@ -44,8 +44,8 @@ incidencyMatrix incidencyMatrixGraph()
                 im_input.print();
             }
         }
-
     }
 
+    im_input.shouldModify();
     return (im_input);
 }

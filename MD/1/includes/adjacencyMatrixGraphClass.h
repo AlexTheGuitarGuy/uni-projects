@@ -258,7 +258,7 @@ public:
                 cout << "1. Modificare\n";
                 cout << "2. Adaugare\n";
                 cout << "3. Stergere\n";
-                cout << "0. iesire\n";
+                cout << "0. Iesire\n";
                 cin >> choice;
                 switch (choice)
                 {
