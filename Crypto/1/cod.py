@@ -75,7 +75,6 @@ def caesar(op):
     string_res = caesarLoop(string_input, op, alphabet)
 
     print(string_res)
-    print
 
 
 def getKey():
