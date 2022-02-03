@@ -278,7 +278,7 @@ public:
                     done = true;
                     break;
                 default:
-                    cout << "\nValoare diferita de diapazonul 1-4, introduceti din nou.\n";
+                    cout << "\nValoare diferita de diapazonul oferit, introduceti din nou.\n";
                 }
             }
         }

@@ -405,7 +405,7 @@ public:
                 cin >> change;
                 if (change != 1 && change != 0)
                 {
-                    cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
+                    cout << "\nValoare diferita de diapazonul oferit, introduceti din nou.\n";
                 }
                 else if (change == 1)
                 {
