@@ -15,13 +15,13 @@ void makeGraph()
         int type;
         bool done = false;
 
-        cout << "\nAlegeti modul de reprezentare al grafului:\n";
         while (!done)
         {
+            cout << "\nAlegeti modul de reprezentare al grafului nou:\n";
             cout << "1 - Matrice de incidenta\n";
             cout << "2 - Matrice de adiacenta\n";
             cout << "3 - Lista de adiacenta\n";
-            cout << "0 - Iesire\n";
+            cout << "0 - Inapoi\n";
             cin >> type;
 
             switch (type)
@@ -50,6 +50,58 @@ void makeGraph()
     }
 }
 
+void modifyGraph()
+{
+    try
+    {
+        int type;
+        bool done = false;
+
+        while (!done)
+        {
+            cout << "\nAlegeti tipul reprezentarii grafului pe care doriti sa-l modificati:\n";
+            cout << "1 - Matrice de incidenta\n";
+            cout << "2 - Matrice de adiacenta\n";
+            cout << "3 - Lista de adiacenta\n";
+            cout << "0 - Inapoi\n";
+            cin >> type;
+
+            switch (type)
+            {
+            case 1:
+                im_input[0].shouldModify();
+                break;
+            case 2:
+                am_input[0].shouldModify();
+                break;
+            case 3:
+                al_input[0].shouldModify();
+                break;
+            case 0:
+                done = true;
+                break;
+            default:
+                cout << "\nValoare invalida, introduceti din nou.\n";
+            }
+        }
+    }
+    catch (std::ios_base::failure const &ex)
+    {
+        cout << "\nValoare diferita de int.\n";
+        return;
+    }
+}
+
+void showGraphList()
+{
+    for (int i = 0; im_input[i].isMade; i++)
+        im_input[i].print(i + 1);
+    for (int i = 0; am_input[i].isMade; i++)
+        am_input[i].print(i + 1);
+    for (int i = 0; al_input[i].isMade; i++)
+        al_input[i].print(i + 1);
+}
+
 int main()
 {
     try
@@ -57,14 +109,14 @@ int main()
         int type;
         bool done = false;
 
-        cout << "\nAlegeti tipul de operatie:\n";
         while (!done)
         {
-            cout << "1 - Crearea unui graf\n";
-            cout << "2 - Convertirea unui graf\n";
-            cout << "3 - Salvarea unui graf\n";
-            cout << "4 - Stergerea unui graf\n";
-            cout << "5 - Modificarea unui graf\n";
+            cout << "\nAlegeti tipul de operatie:\n";
+            cout << "1 - Creare graf\n";
+            cout << "2 - Modificare graf\n";
+            cout << "3 - Salvare graf\n";
+            cout << "4 - Stergere graf\n";
+            cout << "5 - Convertire graf\n";
             cout << "6 - Afisarea listei grafurilor\n";
             cout << "0 - Iesire\n";
             cin >> type;
@@ -74,6 +126,17 @@ int main()
             case 1:
                 makeGraph();
                 break;
+            case 2:
+                modifyGraph();
+                break;
+            case 6:
+                showGraphList();
+                break;
+            case 0:
+                done = true;
+                break;
+            default:
+                cout << "\nNu exista optiunea cu numarul dat, introduceti din nou.\n";
             }
         }
     }

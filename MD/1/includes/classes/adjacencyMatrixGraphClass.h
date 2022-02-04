@@ -163,15 +163,15 @@ private:
                 {
                 case 1:
                     introduce();
-                    print();
+                    print(-1);
                     break;
                 case 2:
                     add();
-                    print();
+                    print(-1);
                     break;
                 case 3:
                     deleteElem();
-                    print();
+                    print(-1);
                     break;
                 case 0:
                     done = true;
@@ -200,6 +200,8 @@ private:
 public:
     bool fail = false;
     int **arr;
+    int isMade = 0;
+    string name;
 
     void getShape()
     {
@@ -273,9 +275,16 @@ public:
         }
     }
 
-    void print()
+    void print(int i)
     {
-        std::cout << "Graful obtinut:\n";
+        switch (i)
+        {
+        case -1:
+            std::cout << "\nGraful rezultant:\n";
+            break;
+        default:
+            std::cout << "\nMatricea de adiacenta pentru graful \"" << name << "\":\n";
+        }
         std::cout << "\t";
         for (int i = 0; i < v; i++)
         {
@@ -303,12 +312,13 @@ public:
     void shouldModify()
     {
         int change;
+        print(1);
 
         try
         {
             while (true)
             {
-                std::cout << "\nDoriti sa modificati vre-un element in graf? (1/0)\n";
+                std::cout << "\nDoriti sa modificati graful dat? (1/0)\n";
                 cin >> change;
                 if (change != 1 && change != 0)
                 {
@@ -341,10 +351,13 @@ public:
             {
                 introduce();
                 if (!fail)
-                    print();
+                {
+                    cout << "\nCum se va numi graful dat? (fara spatii)\n";
+                    cin >> name;
+                    print(1);
+                    isMade = 1;
+                }
             }
         }
-
-        shouldModify();
     }
 };
