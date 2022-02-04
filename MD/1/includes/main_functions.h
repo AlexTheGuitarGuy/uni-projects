@@ -1,9 +1,6 @@
 #pragma once
 #include <iostream>
-#include "incidencyMatrixGraphClass.h"
-#include "adjacencyMatrixGraphClass.h"
-#include "adjacencyListGraphClass.h"
+#include "classes/incidencyMatrixGraphClass.h"
+#include "classes/adjacencyMatrixGraphClass.h"
+#include "classes/adjacencyListGraphClass.h"
 
-incidencyMatrix incidencyMatrixGraph();
-adjacencyMatrix adjacencyMatrixGraph();
-adjacencyList adjacencyListGraph();

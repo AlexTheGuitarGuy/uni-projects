@@ -7,7 +7,6 @@ class adjacencyMatrix
 {
 private:
     int v;
-    int **arr;
 
     int **reallocate()
     {
@@ -199,8 +198,8 @@ private:
     }
 
 public:
-
     bool fail = false;
+    int **arr;
 
     void getShape()
     {
@@ -330,5 +329,22 @@ public:
         }
     }
 
+    void make()
+    {
+        cin.exceptions(std::ios_base::failbit);
 
+        getShape();
+        if (!fail)
+        {
+            arr = allocate();
+            if (!fail)
+            {
+                introduce();
+                if (!fail)
+                    print();
+            }
+        }
+
+        shouldModify();
+    }
 };

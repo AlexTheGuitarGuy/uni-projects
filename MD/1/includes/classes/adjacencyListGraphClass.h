@@ -422,4 +422,22 @@ public:
             std::cout << "\nValoare diferita de int.\n";
         }
     }
+
+    void make()
+    {
+
+        cin.exceptions(std::ios_base::failbit);
+
+        allocate();
+        if (!fail)
+        {
+            introduce();
+            if (!fail)
+            {
+                print();
+            }
+        }
+
+        shouldModify();
+    }
 };

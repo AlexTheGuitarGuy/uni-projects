@@ -8,8 +8,6 @@ class incidencyMatrix
 private:
     int v;
     int m;
-    int **arr;
-    int isOriented;
 
     int **vreallocate()
     {
@@ -51,13 +49,13 @@ private:
         {
             for (int j = 0; j < v; j++)
             {
-                if (arr[i][j] != 1 && arr[i][j] != -1)
+                if (arr[i][j] != 1 && arr[i][j] != -1 && arr[i][j] != 2)
                     arr[i][j] = 0;
             }
         }
     }
 
-   void initialize(int i)
+    void initialize(int i)
     {
 
         for (int j = 0; j < v; j++)
@@ -94,71 +92,26 @@ private:
             fail = true;
             return;
         }
-        if (isOriented)
+        if (in == out)
+            arr[i][in] = 2;
+        else
         {
-
-            arr[i][out] = -1;
-        }
-        else if (!isOriented)
-        {
-
-            arr[i][out] = 1;
-        }
-
-        arr[i][in] = 1;
-    }
-
-    void introduce(int i, int del)
-    {
-        v++;
-        initialize(i);
-        v--;
-        int in, out;
-
-        cout << "\nCe varfuri uneste muchia " << i + 1 << "? (introduceti perechi)\n";
-        try
-        {
-            while (true)
+            if (isOriented)
             {
 
-                cin >> out >> in;
-                in--;
-                out--;
-                if (in >= v || in < 0 || out >= v || out < 0)
-                {
-                    cout << "\nNu exista varful dat, introduceti din nou.\n";
-                }
-                else
-                    break;
-            }
-        }
-        catch (std::ios_base::failure const &ex)
-        {
-            cout << "\nValoare diferita de int.\n";
-            fail = true;
-            return;
-        }
-        if (isOriented)
-        {
-            if (out >= del)
-                arr[i][out + 1] = -1;
-            else
                 arr[i][out] = -1;
-        }
-        else if (!isOriented)
-        {
-            if (out >= del)
-                arr[i][out + 1] = 1;
-            else
+            }
+            else if (!isOriented)
+            {
+
                 arr[i][out] = 1;
-        }
-        if (in == del)
-            arr[i][in + 1] = 1;
-        else
+            }
+
             arr[i][in] = 1;
+        }
     }
 
-   void modify()
+    void modify()
     {
         while (true)
         {
@@ -264,13 +217,25 @@ private:
         return (tmp);
     }
 
-    void reconnect(int j)
+    void reconnect()
     {
         cout << "\nRescrieti legaturile muchiilor sterse ca rezultat al stergerii varfului:\n";
+        int connections;
+        int j;
+
         for (int i = 0; i < m; i++)
         {
-            if (arr[i][j] == 1 || arr[i][j] == -1)
-                introduce(i, j);
+            connections = 0;
+            int j;
+            for (j = 0; j < v; j++)
+            {
+                if (arr[i][j] == 1 || arr[i][j] == -1)
+                    connections++;
+                else if (arr[i][j] == 2)
+                    connections = 2;
+            }
+            if (connections < 2)
+                introduce(i);
         }
     }
 
@@ -293,8 +258,8 @@ private:
                     return;
                 del--;
                 v--;
-                reconnect(del);
                 arr = vreallocate(del);
+                reconnect();
                 break;
             case 2:
 
@@ -371,6 +336,8 @@ private:
     }
 
 public:
+    int **arr;
+    int isOriented;
     bool fail = false;
 
     int getShape()
@@ -453,16 +420,20 @@ public:
                 fail = true;
                 return;
             }
-
-            if (isOriented)
+            if (in == out)
+                arr[i][in] = 2;
+            else
             {
-                arr[i][out] = -1;
+                if (isOriented)
+                {
+                    arr[i][out] = -1;
+                }
+                else if (!isOriented)
+                {
+                    arr[i][out] = 1;
+                }
+                arr[i][in] = 1;
             }
-            else if (!isOriented)
-            {
-                arr[i][out] = 1;
-            }
-            arr[i][in] = 1;
         }
     }
 
@@ -522,4 +493,45 @@ public:
         }
     }
 
+    void make()
+    {
+        cin.exceptions(std::ios_base::failbit);
+
+        try
+        {
+            while (true)
+            {
+                cout << "\nEste orientat graful dat? (1/0)\n";
+                cin >> isOriented;
+                if (isOriented != 1 && isOriented != 0)
+                {
+                    cout << "\nValoare diferita de 1 si 0, introduceti din nou.\n";
+                }
+                else
+                    break;
+            }
+        }
+        catch (std::ios_base::failure const &ex)
+        {
+            cout << "\nValoare diferita de int.\n";
+            fail = 1;
+        }
+
+        getShape();
+        if (!fail)
+        {
+
+            arr = allocate();
+            if (!fail)
+            {
+                introduce();
+                if (!fail)
+                {
+                    print();
+                }
+            }
+        }
+
+        shouldModify();
+    }
 };
