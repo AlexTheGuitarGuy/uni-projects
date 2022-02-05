@@ -78,6 +78,20 @@ void showGraphList(int show)
     }
 }
 
+void printSavedGraphs(adjacencyList *in)
+{
+
+    if (in[0].isMade == true)
+    {
+        cout << "\nListe de adiacenta salvate: \n";
+        for (int i = 0; in[i].isMade; i++)
+        {
+            cout << i + 1 << ": ";
+            in[i].print(1);
+        }
+    }
+}
+
 void makeGraph()
 {
     try
@@ -249,7 +263,105 @@ void loadGraphs()
 
 void freeGraphs()
 {
+    for (int i = 0; i < im_i; i++)
+    {
+        im_input[i].freeGraph();
+    }
+    im_i = 0;
 
+    for (int i = 0; i < am_i; i++)
+    {
+        am_input[i].freeGraph();
+    }
+    am_i = 0;
+
+    for (int i = 0; i < al_i; i++)
+    {
+        al_input[i].freeGraph();
+    }
+    al_i = 0;
+}
+
+namespace del
+{
+    int i;
+
+    void removeGraph(int del, adjacencyList *tmp)
+    {
+        std::ofstream of("graphs.txt", std::ios::out | std::ios::trunc);
+        for (int j = 0; j < i; j++)
+        {
+            if (j != del)
+            {
+                tmp[j].shouldSave = true;
+            }
+        }
+
+        for (int j = 0; j < i; j++)
+        {
+            if (j != del)
+            {
+                tmp[j].serialize(of);
+            }
+        }
+        // tmp[del].freeGraph();
+        of.close();
+        if (!of.good())
+        {
+            cout << "S-a produs o eroare in lucrul cu fisierul de scriere!" << endl;
+        }
+    }
+
+    void getSaves(adjacencyList *tmp)
+    {
+        std::ifstream inf("graphs.txt", std::ios::out | std::ios::app);
+        while (!(inf >> std::ws).eof())
+        {
+            tmp[i].deserialize(inf);
+            if (inf.fail()) /* handle with break or throw */
+                break;
+            i++;
+        }
+        printSavedGraphs(tmp);
+        inf.close();
+        if (!inf.good())
+        {
+            return;
+        }
+    }
+
+    void deleteGraph()
+    {
+        adjacencyList tmp[100];
+        i = 0;
+        int choice;
+        getSaves(tmp);
+        try
+        {
+            cout << "\nAlegeti numarul grafului pe care doriti sa-l stergeti.\n";
+            cin >> choice;
+            if (choice == 0)
+                return;
+            choice--;
+            if (choice >= 0 && choice < i)
+            {
+                removeGraph(choice, tmp);
+            }
+            else
+                cout << "\nValoare invalida.\n";
+        }
+        catch (std::ios_base::failure const &ex)
+        {
+            cout << "\nValoare diferita de int.\n";
+            return;
+        }
+    }
+
+}
+
+void deleteGraph()
+{
+    del::deleteGraph();
 }
 
 int main()
@@ -286,6 +398,10 @@ int main()
                 break;
             case 4:
                 loadGraphs();
+                break;
+            case 5:
+                deleteGraph();
+                break;
             case 7:
                 showGraphList(4);
                 break;
@@ -306,5 +422,6 @@ int main()
         return 1;
     }
 
+    freeGraphs();
     return (0);
 }

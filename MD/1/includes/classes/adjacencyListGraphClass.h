@@ -76,7 +76,7 @@ public:
     {
         node *tmp = new node;
         tmp = head;
-        int *res = (int *)malloc(sizeof(int) * size());
+        int *res = new int[size()];
         int i = 0;
         if (tmp != NULL)
         {
@@ -332,6 +332,17 @@ public:
             }
         }
         return (i);
+    }
+
+    void freeList()
+    {
+        node *tmp = new node;
+
+        while ((tmp = head) != NULL)
+        {
+            head = head->next;
+            delete tmp;
+        }
     }
 };
 
@@ -616,14 +627,14 @@ public:
     {
         if (shouldSave)
         {
-            int **arr = (int **)malloc(sizeof(int *) * v);
+            int **arr = new int*[v];
             for (int i = 0; i < v; i++)
             {
                 if (list[i].size() >= 1)
                     arr[i] = list[i].to_array();
                 else
                 {
-                    arr[i] = (int *)malloc(sizeof(int));
+                    arr[i] = new int;
                     arr[i][0] = 0;
                 }
             }
@@ -678,5 +689,15 @@ public:
             return;
         }
         return;
+    }
+
+    void freeGraph()
+    {
+        for (int i = 0; i < v; i++)
+        {
+            list[i].freeList();
+        }
+        isMade = false;
+        shouldSave = false;
     }
 };

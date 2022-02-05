@@ -323,15 +323,6 @@ private:
         }
     }
 
-    void freeGraph(int **arr)
-    {
-        for (int i = 0; i < v; i++)
-        {
-            delete[] arr[i];
-        }
-        delete[] arr;
-    }
-
 public:
     int v;
     int m;
@@ -543,5 +534,15 @@ public:
                 }
             }
         }
+    }
+
+    void freeGraph()
+    {
+        for (int i = 0; i < v; i++)
+        {
+            delete[] arr[i];
+        }
+        delete[] arr;
+        isMade = false;
     }
 };
