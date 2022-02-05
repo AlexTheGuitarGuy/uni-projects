@@ -314,6 +314,7 @@ namespace del
 
     void getSaves(adjacencyList *tmp)
     {
+        i = 0;
         std::ifstream inf("graphs.txt", std::ios::out | std::ios::app);
         while (!(inf >> std::ws).eof())
         {
@@ -330,10 +331,10 @@ namespace del
         }
     }
 
-    void deleteGraph()
+    bool deleteGraph()
     {
+        bool done = false;
         adjacencyList tmp[100];
-        i = 0;
         int choice;
         getSaves(tmp);
         try
@@ -341,7 +342,10 @@ namespace del
             cout << "\nAlegeti numarul grafului pe care doriti sa-l stergeti.\n";
             cin >> choice;
             if (choice == 0)
-                return;
+            {
+                bool done = true;
+                return done;
+            }
             choice--;
             if (choice >= 0 && choice < i)
             {
@@ -353,15 +357,19 @@ namespace del
         catch (std::ios_base::failure const &ex)
         {
             cout << "\nValoare diferita de int.\n";
-            return;
         }
+        return done;
     }
 
 }
 
 void deleteGraph()
 {
-    del::deleteGraph();
+    bool done;
+    while (!done)
+    {
+        done = del::deleteGraph();
+    }
 }
 
 int main()
@@ -380,8 +388,9 @@ int main()
             cout << "4 - Incarcare grafuri\n";
             cout << "5 - Stergere graf\n";
             cout << "6 - Convertire graf\n";
-            cout << "7 - Afisarea listei grafurilor\n";
-            cout << "8 - Eliberarea memoriei alocate\n";
+            cout << "7 - Afisarea listei grafurilor alocate\n";
+            cout << "8 - Afisarea listei grafurilor salvate\n";
+            cout << "9 - Eliberarea memoriei alocate\n";
             cout << "0 - Iesire\n";
             cin >> type;
 
@@ -406,6 +415,9 @@ int main()
                 showGraphList(4);
                 break;
             case 8:
+                del::getSaves(al_input);
+                break;
+            case 9:
                 freeGraphs();
                 break;
             case 0:
