@@ -1,12 +1,82 @@
 #include <iostream>
 #include "includes/main_functions.h"
 #include <string>
+#include <fstream>
 
 using namespace std;
 
 incidencyMatrix im_input[100];
+int im_i = 0;
 adjacencyMatrix am_input[100];
+int am_i = 0;
 adjacencyList al_input[100];
+int al_i = 0;
+
+void showGraphList(int show)
+{
+
+    switch (show)
+    {
+    case 1:
+        cout << "\nMatrici de incidenta disponibile: \n";
+        for (int i = 0; im_input[i].isMade; i++)
+        {
+            cout << i + 1 << ": ";
+            im_input[i].print(1);
+        }
+        break;
+    case 2:
+        cout << "\nMatrici de adiacenta disponibile: \n";
+        for (int i = 0; am_input[i].isMade; i++)
+        {
+            cout << i + 1 << ": ";
+            am_input[i].print(1);
+        }
+        break;
+    case 3:
+        cout << "\nListe de adiacenta disponibile: \n";
+        for (int i = 0; al_input[i].isMade; i++)
+        {
+            cout << i + 1 << ": ";
+            al_input[i].print(1);
+        }
+        break;
+    case 4:
+        if (im_input[0].isMade == true)
+        {
+            cout << "\nMatrici de incidenta disponibile: \n";
+            for (int i = 0; im_input[i].isMade; i++)
+            {
+                cout << i + 1 << ": ";
+                im_input[i].print(1);
+            }
+        }
+
+        if (am_input[0].isMade == true)
+        {
+            cout << "\nMatrici de adiacenta disponibile: \n";
+            for (int i = 0; am_input[i].isMade; i++)
+            {
+                cout << i + 1 << ": ";
+                am_input[i].print(1);
+            }
+        }
+
+        if (al_input[0].isMade == true)
+        {
+            cout << "\nListe de adiacenta disponibile: \n";
+            for (int i = 0; al_input[i].isMade; i++)
+            {
+                cout << i + 1 << ": ";
+                al_input[i].print(1);
+            }
+        }
+        break;
+    default:
+        cout << "\nNu exista asa optiune\n";
+        break;
+    }
+}
 
 void makeGraph()
 {
@@ -27,13 +97,16 @@ void makeGraph()
             switch (type)
             {
             case 1:
-                im_input[0].make();
+                im_input[im_i].make();
+                im_i++;
                 break;
             case 2:
-                am_input[0].make();
+                am_input[am_i].make();
+                am_i++;
                 break;
             case 3:
-                al_input[0].make();
+                al_input[al_i].make();
+                al_i++;
                 break;
             case 0:
                 done = true;
@@ -66,16 +139,65 @@ void modifyGraph()
             cout << "0 - Inapoi\n";
             cin >> type;
 
+            int choice;
+            string message = "\nCare graf doriti sa-l modificati? ";
+            string error = "\nValoare invalida, introduceti din nou.\n";
             switch (type)
             {
             case 1:
-                im_input[0].shouldModify();
+                while (true)
+                {
+                    showGraphList(1);
+                    cout << message;
+                    cin >> choice;
+                    if (choice == 0)
+                        break;
+                    choice--;
+                    if (choice >= 0 && choice < im_i)
+                    {
+                        im_input[choice].shouldModify();
+                        break;
+                    }
+                    else
+                        cout << error;
+                }
                 break;
             case 2:
-                am_input[0].shouldModify();
+                while (true)
+                {
+                    showGraphList(2);
+                    cout << message;
+                    cin >> choice;
+                    if (choice == 0)
+                        break;
+                    choice--;
+                    if (choice >= 0 && choice < am_i)
+                    {
+                        am_input[choice].shouldModify();
+                        break;
+                    }
+                    else
+                        cout << error;
+                }
                 break;
+
             case 3:
-                al_input[0].shouldModify();
+                while (true)
+                {
+                    showGraphList(3);
+                    cout << message;
+                    cin >> choice;
+                    if (choice == 0)
+                        break;
+                    choice--;
+                    if (choice >= 0 && choice < al_i)
+                    {
+                        al_input[choice].shouldModify();
+                        break;
+                    }
+                    else
+                        cout << error;
+                }
                 break;
             case 0:
                 done = true;
@@ -92,14 +214,42 @@ void modifyGraph()
     }
 }
 
-void showGraphList()
+void saveGraphs()
 {
-    for (int i = 0; im_input[i].isMade; i++)
-        im_input[i].print(i + 1);
-    for (int i = 0; am_input[i].isMade; i++)
-        am_input[i].print(i + 1);
-    for (int i = 0; al_input[i].isMade; i++)
-        al_input[i].print(i + 1);
+    std::ofstream of("graphs.txt", std::ios::out | std::ios::app);
+    for (int i = 0; i < al_i; i++)
+    {
+        al_input[i].serialize(of);
+    }
+    of.close();
+    if (!of.good())
+    {
+        cout << "S-a produs o eroare in lucrul cu fisierul de scriere!" << endl;
+    }
+}
+
+void loadGraphs()
+{
+    std::ifstream inf("graphs.txt", std::ios::out | std::ios::app);
+
+    while (!(inf >> std::ws).eof())
+    {
+
+        al_input[al_i].deserialize(inf);
+        if (inf.fail()) /* handle with break or throw */
+            break;
+        al_i++;
+    }
+    inf.close();
+    if (!inf.good())
+    {
+        return;
+    }
+}
+
+void freeGraphs()
+{
+
 }
 
 int main()
@@ -114,10 +264,12 @@ int main()
             cout << "\nAlegeti tipul de operatie:\n";
             cout << "1 - Creare graf\n";
             cout << "2 - Modificare graf\n";
-            cout << "3 - Salvare graf\n";
-            cout << "4 - Stergere graf\n";
-            cout << "5 - Convertire graf\n";
-            cout << "6 - Afisarea listei grafurilor\n";
+            cout << "3 - Salvare grafuri\n";
+            cout << "4 - Incarcare grafuri\n";
+            cout << "5 - Stergere graf\n";
+            cout << "6 - Convertire graf\n";
+            cout << "7 - Afisarea listei grafurilor\n";
+            cout << "8 - Eliberarea memoriei alocate\n";
             cout << "0 - Iesire\n";
             cin >> type;
 
@@ -129,8 +281,16 @@ int main()
             case 2:
                 modifyGraph();
                 break;
-            case 6:
-                showGraphList();
+            case 3:
+                saveGraphs();
+                break;
+            case 4:
+                loadGraphs();
+            case 7:
+                showGraphList(4);
+                break;
+            case 8:
+                freeGraphs();
                 break;
             case 0:
                 done = true;

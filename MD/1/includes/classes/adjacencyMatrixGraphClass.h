@@ -6,8 +6,6 @@ using namespace std;
 class adjacencyMatrix
 {
 private:
-    int v;
-
     int **reallocate()
     {
         int **tmp = new int *[v];
@@ -198,6 +196,7 @@ private:
     }
 
 public:
+    int v;
     bool fail = false;
     int **arr;
     int isMade = 0;
@@ -245,26 +244,28 @@ public:
         int i, j;
         try
         {
-            std::cout << "Ce varfuri se unesc? (introduceti perechi separate sau introduceti 0 pentru a inceta)\n";
-            while (true)
+            for (int i = 0; i < v; i++)
             {
 
-                cin >> i >> j;
-                if (i == 0 || j == 0)
-                {
-                    break;
-                }
-                i--;
-                j--;
-                std::cout << "_\n";
+                std::cout << "Ce varfuri se unesc cu " << i + 1 << "? (introduceti numere separate sau 0 pentru a continua)\n";
 
-                if ((i < 0 || j < 0) || (i >= v || j >= v))
+                while (true)
                 {
-                    std::cout << "\nValoare invalida, introduceti din nou.\n";
-                    continue;
-                }
+                    cin >> j;
+                    if (j == 0)
+                    {
+                        break;
+                    }
+                    j--;
 
-                arr[i][j] = 1;
+                    if (j < 0 || j >= v)
+                    {
+                        std::cout << "\nValoare invalida, introduceti din nou.\n";
+                        continue;
+                    }
+
+                    arr[i][j] = 1;
+                }
             }
         }
         catch (std::ios_base::failure const &ex)

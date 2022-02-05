@@ -6,9 +6,6 @@ using namespace std;
 class incidencyMatrix
 {
 private:
-    int v;
-    int m;
-
     int **vreallocate()
     {
         int **tmp = new int *[m];
@@ -336,6 +333,8 @@ private:
     }
 
 public:
+    int v;
+    int m;
     int **arr;
     int isOriented;
     bool fail = false;
