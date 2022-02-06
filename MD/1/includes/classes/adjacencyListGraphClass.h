@@ -268,7 +268,7 @@ public:
         try
         {
 
-            std::cout << "\nAlegeti operatiunea:\n";
+            std::cout << "\nAlegeti operatiunea pentru varf:\n";
 
             std::cout << "1. Modificare\n";
             std::cout << "2. Adaugare\n";
@@ -349,18 +349,6 @@ public:
 class adjacencyList
 {
 private:
-    void addEnding()
-    {
-        for (int i = 0; i < v; i++)
-        {
-            if (list[i].size() > 0)
-            {
-                if (list[i].getTail()->data != 0)
-                    list[i].push(0);
-            }
-        }
-    }
-
     void modify()
     {
 
@@ -485,12 +473,24 @@ private:
     }
 
 public:
-    bool fail;
+    bool fail = false;
     int isMade = 0;
     bool shouldSave = true;
     string name;
     linked_list list[100];
     int v;
+
+    void addEnding()
+    {
+        for (int i = 0; i < v; i++)
+        {
+            if (list[i].size() > 0)
+            {
+                if (list[i].getTail()->data != 0)
+                    list[i].push(0);
+            }
+        }
+    }
 
     void allocate()
     {
@@ -627,7 +627,7 @@ public:
     {
         if (shouldSave)
         {
-            int **arr = new int*[v];
+            int **arr = new int *[v];
             for (int i = 0; i < v; i++)
             {
                 if (list[i].size() >= 1)
@@ -700,4 +700,5 @@ public:
         isMade = false;
         shouldSave = false;
     }
+
 };

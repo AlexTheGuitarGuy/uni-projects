@@ -40,18 +40,6 @@ private:
         return (tmp);
     }
 
-    void initialize()
-    {
-        for (int i = 0; i < m; i++)
-        {
-            for (int j = 0; j < v; j++)
-            {
-                if (arr[i][j] != 1 && arr[i][j] != -1 && arr[i][j] != 2)
-                    arr[i][j] = 0;
-            }
-        }
-    }
-
     void initialize(int i)
     {
 
@@ -331,6 +319,18 @@ public:
     bool fail = false;
     int isMade = 0;
     string name;
+
+    void initialize()
+    {
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < v; j++)
+            {
+                if (arr[i][j] != 1 && arr[i][j] != -1 && arr[i][j] != 2)
+                    arr[i][j] = 0;
+            }
+        }
+    }
 
     int getShape()
     {

@@ -45,18 +45,6 @@ private:
         return (tmp);
     }
 
-    void initialize(int **arr)
-    {
-        for (int i = 0; i < v; i++)
-        {
-            for (int j = 0; j < v; j++)
-            {
-                if (arr[i][j] != 1)
-                    arr[i][j] = 0;
-            }
-        }
-    }
-
     void add()
     {
         int add = 0;
@@ -192,6 +180,20 @@ public:
     int **arr;
     int isMade = 0;
     string name;
+
+    void initialize(int **arr)
+    {
+        for (int i = 0; i < v; i++)
+        {
+            for (int j = 0; j < v; j++)
+            {
+                if (arr[i][j] != 1)
+                {
+                    arr[i][j] = 0;
+                }
+            }
+        }
+    }
 
     void getShape()
     {
@@ -362,4 +364,5 @@ public:
         delete[] arr;
         isMade = false;
     }
+
 };

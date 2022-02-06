@@ -263,23 +263,32 @@ void loadGraphs()
 
 void freeGraphs()
 {
-    for (int i = 0; i < im_i; i++)
+    if (im_i > 0)
     {
-        im_input[i].freeGraph();
+        for (int i = 0; i < im_i; i++)
+        {
+            im_input[i].freeGraph();
+        }
+        im_i = 0;
     }
-    im_i = 0;
 
-    for (int i = 0; i < am_i; i++)
+    if (am_i > 0)
     {
-        am_input[i].freeGraph();
+        for (int i = 0; i < am_i; i++)
+        {
+            am_input[i].freeGraph();
+        }
+        am_i = 0;
     }
-    am_i = 0;
 
-    for (int i = 0; i < al_i; i++)
+    if (al_i > 0)
     {
-        al_input[i].freeGraph();
+        for (int i = 0; i < al_i; i++)
+        {
+            al_input[i].freeGraph();
+        }
+        al_i = 0;
     }
-    al_i = 0;
 }
 
 namespace del
@@ -304,7 +313,6 @@ namespace del
                 tmp[j].serialize(of);
             }
         }
-        // tmp[del].freeGraph();
         of.close();
         if (!of.good())
         {
@@ -319,7 +327,7 @@ namespace del
         while (!(inf >> std::ws).eof())
         {
             tmp[i].deserialize(inf);
-            if (inf.fail()) /* handle with break or throw */
+            if (inf.fail())
                 break;
             i++;
         }
@@ -372,6 +380,165 @@ void deleteGraph()
     }
 }
 
+void getSaves()
+{
+    adjacencyList tmp[100];
+    int i = 0;
+    std::ifstream inf("graphs.txt", std::ios::out | std::ios::app);
+    while (!(inf >> std::ws).eof())
+    {
+        tmp[i].deserialize(inf);
+        if (inf.fail())
+            break;
+        i++;
+    }
+    printSavedGraphs(tmp);
+    inf.close();
+    if (!inf.good())
+    {
+        return;
+    }
+}
+
+void convertChoice(int from, int to, int nb)
+{
+    if (from == 1 && to == 2)
+    {
+        am_input[am_i] = IMtoAM(im_input[nb]);
+        am_i++;
+    }
+    else if (from == 1 && to == 3)
+    {
+        al_input[al_i] = AMtoAL(IMtoAM(im_input[nb]));
+        al_i++;
+    }
+    else if (from == 2 && to == 1)
+    {
+        im_input[im_i] = AMtoIM(am_input[nb]);
+        im_i++;
+    }
+    else if (from == 2 && to == 3)
+    {
+        al_input[al_i] = AMtoAL(am_input[nb]);
+        al_i++;
+    }
+    else if (from == 3 && to == 1)
+    {
+        im_input[im_i] = AMtoIM(ALtoAM(al_input[nb]));
+        im_i++;
+    }
+    else if (from == 3 && to == 2)
+    {
+        am_input[am_i] = ALtoAM(al_input[nb]);
+        am_i++;
+    }
+}
+
+void convertGraph()
+{
+    try
+    {
+        int typeFrom, typeTo;
+        bool done = false;
+
+        while (!done)
+        {
+            string error = "\nValoare invalida, introduceti din nou.\n";
+            string types = "1 - Matrice de incidenta\n2 - Matrice de adiacenta\n3 - Lista de adiacenta\n0 - Inapoi\n";
+            cout << "\nAlegeti tipul reprezentarii grafului din care doriti sa convertiti:\n"
+                 << types;
+            cin >> typeFrom;
+            if (typeFrom == 0)
+                return;
+            else if (typeFrom < 0 || typeFrom > 3)
+            {
+                cout << error;
+                continue;
+            }
+            cout << "\nAlegeti tipul reprezentarii grafului in care doriti sa convertiti:\n";
+            cin >> typeTo;
+            if (typeTo == 0)
+                return;
+            else if (typeTo < 0 || typeTo > 3)
+            {
+                cout << error;
+                continue;
+            }
+            int choice;
+            string message = "\nCare graf doriti sa-l modificati? ";
+
+            switch (typeFrom)
+            {
+            case 1:
+                while (true)
+                {
+                    showGraphList(1);
+                    cout << message;
+                    cin >> choice;
+                    if (choice == 0)
+                        break;
+                    choice--;
+                    if (choice >= 0 && choice < im_i)
+                    {
+                        convertChoice(typeFrom, typeTo, choice);
+                        break;
+                    }
+                    else
+                        cout << error;
+                }
+                break;
+            case 2:
+                while (true)
+                {
+                    showGraphList(2);
+                    cout << message;
+                    cin >> choice;
+                    if (choice == 0)
+                        break;
+                    choice--;
+                    if (choice >= 0 && choice < am_i)
+                    {
+                        convertChoice(typeFrom, typeTo, choice);
+                        break;
+                    }
+                    else
+                        cout << error;
+                }
+                break;
+
+            case 3:
+                while (true)
+                {
+                    showGraphList(3);
+                    cout << message;
+                    cin >> choice;
+                    if (choice == 0)
+                        break;
+                    choice--;
+                    if (choice >= 0 && choice < al_i)
+                    {
+                        convertChoice(typeFrom, typeTo, choice);
+                        break;
+                    }
+                    else
+                        cout << error;
+                }
+                break;
+            case 0:
+                done = true;
+                break;
+            default:
+                cout << "\nValoare invalida, introduceti din nou.\n";
+            }
+        }
+    }
+    catch (std::ios_base::failure const &ex)
+    {
+        cout << "\nValoare diferita de int.\n";
+        return;
+    }
+} // fa ca sa nu se salveze sau faca grafuri cu acelasi nume, si sa poti schimba numele grafului
+
 int main()
 {
     try
@@ -411,11 +578,14 @@ int main()
             case 5:
                 deleteGraph();
                 break;
+            case 6:
+                convertGraph();
+                break;
             case 7:
                 showGraphList(4);
                 break;
             case 8:
-                del::getSaves(al_input);
+                getSaves();
                 break;
             case 9:
                 freeGraphs();
