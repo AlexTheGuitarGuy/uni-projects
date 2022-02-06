@@ -497,36 +497,48 @@ void convertChoice(int from, int to, int nb)
     if (from == 1 && to == 2)
     {
         am_input[am_i] = IMtoAM(im_input[nb]);
+        im_input[nb].print(1);
+        cout << "\n->\n";
         am_input[am_i].print(1);
         am_i++;
     }
     else if (from == 1 && to == 3)
     {
         al_input[al_i] = AMtoAL(IMtoAM(im_input[nb]));
+        im_input[nb].print(1);
+        cout << "\n->\n";
         al_input[al_i].print(1);
         al_i++;
     }
     else if (from == 2 && to == 1)
     {
         im_input[im_i] = AMtoIM(am_input[nb]);
+        am_input[nb].print(1);
+        cout << "\n->\n";
         im_input[im_i].print(1);
         im_i++;
     }
     else if (from == 2 && to == 3)
     {
         al_input[al_i] = AMtoAL(am_input[nb]);
+        am_input[nb].print(1);
+        cout << "\n->\n";
         al_input[al_i].print(1);
         al_i++;
     }
     else if (from == 3 && to == 1)
     {
         im_input[im_i] = AMtoIM(ALtoAM(al_input[nb]));
+        al_input[nb].print(1);
+        cout << "\n->\n";
         im_input[im_i].print(1);
         im_i++;
     }
     else if (from == 3 && to == 2)
     {
         am_input[am_i] = ALtoAM(al_input[nb]);
+        al_input[nb].print(1);
+        cout << "\n->\n";
         am_input[am_i].print(1);
         am_i++;
     }

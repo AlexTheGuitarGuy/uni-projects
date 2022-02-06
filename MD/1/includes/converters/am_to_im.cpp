@@ -28,7 +28,7 @@ int calculateM(adjacencyMatrix in, bool isOriented)
             {
                 m++;
             }
-            else if (in.arr[i][j] == 1)
+            else if (in.arr[i][j] == 1 && isOriented)
             {
                 m++;
             }
