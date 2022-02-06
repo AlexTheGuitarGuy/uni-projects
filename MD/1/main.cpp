@@ -228,18 +228,109 @@ void modifyGraph()
     }
 }
 
+namespace save
+{
+    adjacencyList tmp[100];
+
+    void getSaves()
+    {
+        int i = 0;
+        std::ifstream inf("graphs.txt", std::ios::out | std::ios::app);
+        while (!(inf >> std::ws).eof())
+        {
+            tmp[i].deserialize(inf);
+            if (inf.fail())
+                break;
+            i++;
+        }
+        inf.close();
+        if (!inf.good())
+        {
+            return;
+        }
+        return;
+    }
+
+    bool isSaved(string name)
+    {
+        getSaves();
+        for (int i = 0; tmp[i].isMade; i++)
+        {
+            if (tmp[i].name == name)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+bool isPresent(string name)
+{
+    for (int i = 0; al_input[i].isMade; i++)
+    {
+        if (al_input[i].name == name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void listifyAll()
+{
+    if (im_input[0].isMade == true)
+    {
+        for (int i = 0; im_input[i].isMade; i++)
+        {
+            if (!isPresent(im_input[i].name))
+            {
+                al_input[al_i] = AMtoAL(IMtoAM(im_input[i]));
+                al_i++;
+            }
+            else
+            {
+                cout << "\nLista de adiacenta cu numele " << im_input[i].name << " exista deja, nu se va converti matricea de incidenta respectiva.";
+            }
+        }
+        cout << '\n';
+    }
+
+    if (am_input[0].isMade == true)
+    {
+        for (int i = 0; am_input[i].isMade; i++)
+        {
+            if (!isPresent(am_input[i].name))
+            {
+                al_input[al_i] = AMtoAL(am_input[i]);
+                al_i++;
+            }
+            else
+            {
+                cout << "\nLista de adiacenta cu numele " << am_input[i].name << " exista deja, nu se va converti matricea de adiacenta respectiva.";
+            }
+        }
+        cout << '\n';
+    }
+}
+
 void saveGraphs()
 {
+    listifyAll();
     std::ofstream of("graphs.txt", std::ios::out | std::ios::app);
     for (int i = 0; i < al_i; i++)
     {
-        al_input[i].serialize(of);
+        if (!save::isSaved(al_input[i].name))
+            al_input[i].serialize(of);
+        else
+            cout << "\nGraful cu numele " << al_input[i].name << " deja este salvat, schimati-i numele pentru a-l putea salva.";
     }
     of.close();
     if (!of.good())
     {
         cout << "S-a produs o eroare in lucrul cu fisierul de scriere!" << endl;
     }
+    cout << '\n';
 }
 
 void loadGraphs()
@@ -392,12 +483,13 @@ void getSaves()
             break;
         i++;
     }
-    printSavedGraphs(tmp);
     inf.close();
+    printSavedGraphs(tmp);
     if (!inf.good())
     {
         return;
     }
+    return;
 }
 
 void convertChoice(int from, int to, int nb)
@@ -405,31 +497,37 @@ void convertChoice(int from, int to, int nb)
     if (from == 1 && to == 2)
     {
         am_input[am_i] = IMtoAM(im_input[nb]);
+        am_input[am_i].print(1);
         am_i++;
     }
     else if (from == 1 && to == 3)
     {
         al_input[al_i] = AMtoAL(IMtoAM(im_input[nb]));
+        al_input[al_i].print(1);
         al_i++;
     }
     else if (from == 2 && to == 1)
     {
         im_input[im_i] = AMtoIM(am_input[nb]);
+        im_input[im_i].print(1);
         im_i++;
     }
     else if (from == 2 && to == 3)
     {
         al_input[al_i] = AMtoAL(am_input[nb]);
+        al_input[al_i].print(1);
         al_i++;
     }
     else if (from == 3 && to == 1)
     {
         im_input[im_i] = AMtoIM(ALtoAM(al_input[nb]));
+        im_input[im_i].print(1);
         im_i++;
     }
     else if (from == 3 && to == 2)
     {
         am_input[am_i] = ALtoAM(al_input[nb]);
+        am_input[am_i].print(1);
         am_i++;
     }
 }
@@ -465,7 +563,7 @@ void convertGraph()
                 continue;
             }
             int choice;
-            string message = "\nCare graf doriti sa-l modificati? ";
+            string message = "\nCare graf doriti sa-l convertiti? ";
 
             switch (typeFrom)
             {
@@ -537,7 +635,9 @@ void convertGraph()
         cout << "\nValoare diferita de int.\n";
         return;
     }
-} // fa ca sa nu se salveze sau faca grafuri cu acelasi nume, si sa poti schimba numele grafului
+}
+
+// fa ca sa nu se salveze sau faca grafuri cu acelasi nume
 
 int main()
 {

@@ -140,11 +140,13 @@ private:
             {
                 std::cout << "\nAlegeti operatiunea:\n";
 
-                std::cout << "1. Modificare\n";
+                std::cout << "1. Modificare varfuri\n";
                 std::cout << "2. Adaugare\n";
                 std::cout << "3. Stergere\n";
+                std::cout << "4. Modificare nume\n";
                 std::cout << "0. Iesire\n";
                 cin >> choice;
+                string newName;
                 switch (choice)
                 {
                 case 1:
@@ -158,6 +160,11 @@ private:
                 case 3:
                     deleteElem();
                     print(-1);
+                    break;
+                case 4:
+                    cout << "Care va fi noul nume al grafului?\n";
+                    cin >> newName;
+                    name = newName;
                     break;
                 case 0:
                     done = true;
@@ -364,5 +371,4 @@ public:
         delete[] arr;
         isMade = false;
     }
-
 };

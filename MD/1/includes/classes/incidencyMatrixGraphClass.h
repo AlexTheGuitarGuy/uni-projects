@@ -277,11 +277,13 @@ private:
             {
                 cout << "\nAlegeti operatiunea:\n";
 
-                cout << "1. Modificare\n";
+                cout << "1. Modificare varfuri\n";
                 cout << "2. Adaugare\n";
                 cout << "3. Stergere\n";
+                cout << "4. Modificare nume\n";
                 cout << "0. Iesire\n";
                 cin >> choice;
+                string newName;
                 switch (choice)
                 {
                 case 1:
@@ -295,6 +297,11 @@ private:
                 case 3:
                     deleteElem();
                     print(-1);
+                    break;
+                case 4:
+                    cout << "Care va fi noul nume al grafului?\n";
+                    cin >> newName;
+                    name = newName;
                     break;
                 case 0:
                     done = true;

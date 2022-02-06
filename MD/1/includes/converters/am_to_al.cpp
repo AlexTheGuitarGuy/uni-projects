@@ -18,6 +18,5 @@ adjacencyList AMtoAL(adjacencyMatrix in)
     res.addEnding();
     res.name = in.name;
     res.isMade = true;
-    res.print(1);
     return (res);
 }

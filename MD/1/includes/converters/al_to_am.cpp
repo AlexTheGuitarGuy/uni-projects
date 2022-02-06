@@ -18,6 +18,5 @@ adjacencyMatrix ALtoAM(adjacencyList in)
     }
     res.name = in.name;
     res.isMade = true;
-    res.print(1);
     return (res);
 }
