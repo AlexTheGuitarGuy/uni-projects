@@ -66,7 +66,7 @@ incidencyMatrix AMtoIM(adjacencyMatrix in)
                     m++;
                 }
             }
-            else
+            else if (res.isOriented)
             {
                 if (in.arr[i][j] == 1)
                 {

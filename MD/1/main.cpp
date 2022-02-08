@@ -649,8 +649,6 @@ void convertGraph()
     }
 }
 
-// fa ca sa nu se salveze sau faca grafuri cu acelasi nume
-
 int main()
 {
     try
