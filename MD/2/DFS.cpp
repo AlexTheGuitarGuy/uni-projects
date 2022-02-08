@@ -1,5 +1,6 @@
 #include <iostream>
 #include <list>
+#include <algorithm>
 
 using namespace std;
 
@@ -8,10 +9,21 @@ class Graph
 private:
     int V;
     list<int> *adj;
+
     void DFS_helper(int s, bool *visited);
+
+    bool isPresent(int n, int list_i)
+    {
+        return (std::find(adj[list_i].begin(), adj[list_i].end(), n) != adj[list_i].end());
+    };
 
 public:
     Graph(int v);
+
+    bool isOverSize(int n)
+    {
+        return (n >= V ? true : false);
+    };
 
     void addEdge(int v, int w);
 
@@ -52,8 +64,12 @@ void Graph::introduce()
                 else
                     break;
             }
-            if (data != -1)
+            if (data != -1 && !isPresent(data, i))
                 addEdge(i, data);
+            else if (isPresent(data, i))
+            {
+                cout << "Elementul dat este deja prezent, introduceti din nou." << endl;
+            }
         }
     }
 }
@@ -104,15 +120,31 @@ int main()
 {
     int size;
     cout << "Cate varfuri va avea graful?" << endl;
-    cin >> size;
+    while (true)
+    {
+        cin >> size;
+        if (size > 0)
+            break;
+        else
+            cout << "Valoare invalida, introduceti din nou." << endl;
+    }
     Graph g(size);
     g.introduce();
     g.print();
 
     int root;
     cout << "Care va fi elementul de la care se va incepe cautarea?" << endl;
-    cin >> root;
-    g.DFS(root);
+    while (true)
+    {
+        cin >> root;
+        if (!g.isOverSize(root) && root >= 0)
+        {
+            g.DFS(root);
+            break;
+        }
+        else
+            cout << "Valoare invalida, introduceti din nou" << endl;
+    }
 
     return 0;
 }
