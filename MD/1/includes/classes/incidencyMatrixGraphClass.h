@@ -277,7 +277,7 @@ private:
             {
                 cout << "\nAlegeti operatiunea:\n";
 
-                cout << "1. Modificare varfuri\n";
+                cout << "1. Modificare legaturi\n";
                 cout << "2. Adaugare\n";
                 cout << "3. Stergere\n";
                 cout << "4. Modificare nume\n";
