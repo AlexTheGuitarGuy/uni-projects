@@ -15,11 +15,11 @@ public:
 
     void addEdge(int v, int w);
 
-    void DFS(int s);
-
     void introduce();
 
     void print();
+
+    void DFS(int s);
 };
 
 Graph::Graph(int v)
@@ -32,34 +32,6 @@ Graph::Graph(int v)
 void Graph::addEdge(int v, int w)
 {
     adj[v].push_back(w);
-}
-
-void Graph::DFS_helper(int s, bool *visited)
-{
-    cout << "Varf actual: " << s << endl;
-    visited[s] = true;
-
-    for (auto i = adj[s].begin(); i != adj[s].end(); i++)
-    {
-        if (!visited[*i])
-        {
-            cout << "Parcurgere de la varful " << s << " la varful " << *i << endl;
-            DFS_helper(*i, visited);
-        }
-    }
-    cout << "Intoarcere de la varful " << s << endl;
-}
-
-void Graph::DFS(int s)
-{
-    cout << "Efectuarea cautarii in adancime: " << endl;
-    bool *visited = new bool[V];
-    for (int i = 0; i < V; i++)
-    {
-        visited[i] = false;
-    }
-
-    DFS_helper(s, visited);
 }
 
 void Graph::introduce()
@@ -98,6 +70,34 @@ void Graph::print()
         }
         cout << endl;
     }
+}
+
+void Graph::DFS_helper(int s, bool *visited)
+{
+    cout << "Varf actual: " << s << endl;
+    visited[s] = true;
+
+    for (auto i = adj[s].begin(); i != adj[s].end(); i++)
+    {
+        if (!visited[*i])
+        {
+            cout << "Parcurgere de la varful " << s << " la varful " << *i << endl;
+            DFS_helper(*i, visited);
+        }
+    }
+    cout << "Intoarcere de la varful " << s << endl;
+}
+
+void Graph::DFS(int s)
+{
+    cout << "Efectuarea cautarii in adancime: " << endl;
+    bool *visited = new bool[V];
+    for (int i = 0; i < V; i++)
+    {
+        visited[i] = false;
+    }
+
+    DFS_helper(s, visited);
 }
 
 int main()
