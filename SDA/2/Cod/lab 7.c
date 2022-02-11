@@ -2,583 +2,492 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct{
+typedef struct
+{
     char modelul[100];
     char procesorul[100];
     float memoria;
     float viteza;
     float pretul;
-}Computer;
-Computer *COMPUTERE;
+} Computer;
 
-int SIZE = 0;
-int IS_FREED = 0;
-int IS_INITIALIZED = 0;
-
-void showOptions() {
+void showOptions()
+{
     printf("\nMeniu:\n");
-    printf("1. Alocarea dinamică a memoriei pentru tabloul de structuri.\n");
-    printf("2. Introducerea elementelor tabloului de la tastatură.\n");
-    printf("3. Afișarea elementelor tabloului la ecran.\n");
-    printf("4. Adăugarea unui element nou la sfârșit.\n");
-    printf("5. Modificarea elementului tabloului.\n");
-    printf("6. Căutarea elementului tabloului.\n");
-    printf("7. Sortarea tabloului.\n");
-    printf("8. Eliminarea elementului indicat din tablou.\n");
-    printf("9. Eliberarea memoriei alocate pentru tablou.\n");
-    printf("0. Ieșire din program.\n");
+    printf("1. Crearea unui fisier binar nou, introducerea campurilor structurilor de la tastatura si inscrierea lor in acest fisier.\n");
+    printf("2. Afisarea elementelor fisierului binar la ecran.\n");
+    printf("3. Adaugarea unei structuri noi la sfarsit de fisier.\n");
+    printf("4. Modificarea unei structuri a fisierului.\n");
+    printf("5. Cautarea dupa un camp al structurii in fisier.\n");
+    printf("6. Sortarea structurilor fisierului dupa un careva camp.\n");
+    printf("7. Eliminarea unei structuri din fisier.\n");
+    printf("8. Stergerea fisierului de pe disc (la dorinta)\n");
+    printf("0. Iesire din program.\n");
 }
 
-void computerAlloc(){
-    printf("\nCâte computere se vor afla în tablou?\n");
+void printStruct(Computer in)
+{
+    printf("\nmodelul: ");
+    printf("%s", in.modelul);
+    printf("\nprocesorul: ");
+    printf("%s", in.procesorul);
+    printf("\nmemoria: ");
+    printf("%f", in.memoria);
+    printf("\nviteza: ");
+    printf("%f", in.viteza);
+    printf("\npretul: ");
+    printf("%f", in.pretul);
+    printf("\n");
+}
 
-    if(!scanf("%d%*c", &SIZE)){
-        printf("Valoare invalidă.\n");
-        COMPUTERE = NULL;
+void introduceStruct(Computer *in)
+{
+    printf("modelul: ");
+    scanf("%s", in->modelul);
+    printf("procesorul: ");
+    scanf("%s", in->procesorul);
+    printf("memoria: ");
+    scanf("%f", &in->memoria);
+    printf("viteza: ");
+    scanf("%f", &in->viteza);
+    printf("pretul: ");
+    scanf("%f", &in->pretul);
+}
+
+void createAndIntroduce()
+{
+    Computer tmp;
+
+    FILE *out;
+    int lim;
+    printf("Numarul de computere: ");
+    if (!scanf("%d", &lim))
+    {
+        printf("\nvaloare invalida.\n");
+        fclose(out);
         return;
     }
 
-    COMPUTERE = (Computer *)malloc(SIZE * sizeof(Computer));
-
-    if(COMPUTERE == NULL) {
-        printf("A eșuat alocarea memoriei pentru tabloul de structuri.");
+    fopen_s(&out, "compuri.bin", "wb");
+    if (out == NULL)
+    {
+        printf("s-a produs o eroare in procesul deschiderii fisierului pentru scriere.");
+        fclose(out);
+        return;
     }
 
-    IS_FREED = 0;
-}
-
-int addValues(int i) {
-    scanf("%*c");
-    printf("\nCare e modelul computerului %d?\n", i);
-    fgets(COMPUTERE[i].modelul, sizeof(COMPUTERE[i].modelul), stdin);
-    COMPUTERE[i].modelul[ strlen(COMPUTERE[i].modelul) - 1] = '\0';
-
-    printf("\nCe procesor are computerul %d?\n", i);
-    fgets(COMPUTERE[i].procesorul, sizeof(COMPUTERE[i].procesorul), stdin);
-    COMPUTERE[i].procesorul[ strlen(COMPUTERE[i].procesorul) - 1] = '\0';
-
-    printf("\nCâtă memorie are computerul %d? (GB)\n", i);
-    if(!scanf("%f", &COMPUTERE[i].memoria)) {
-        return(0);
+    size_t elements_written = 0;
+    elements_written += fwrite(&lim, sizeof(int), 1, out);
+    for (int i = 0; i < lim; i++)
+    {
+        printf("\ncomputerul %d\n", i);
+        introduceStruct(&tmp);
+        elements_written += fwrite(&tmp, sizeof(Computer), 1, out);
     }
-
-    printf("\nCe viteză are computerul %d? (MHz)\n", i);
-    if(!scanf("%f", &COMPUTERE[i].viteza)){
-        return(0);
-    }
-
-    printf("\nCare e prețul computerului %d? (MDL)\n", i);
-    if(!scanf("%f", &COMPUTERE[i].pretul)){
-        return(0);
-    }
-
-    return (1);
-}
-
-int introduce(){
-    if(!COMPUTERE){
-        printf("Tabloului de structuri nu i s-a alocat memorie.\n");
-        return(1);
-    }
-
-    for (int i = 0; i < SIZE; i++) {
-        if(!addValues(i)){
-            printf("Valoare invalidă\n");
-            return(0);
-        }
-    }
-
-    IS_INITIALIZED = 1;
-    return(1);
-}
-
-int validityCheck(unsigned int i) {
-    if(!COMPUTERE && i >= 1){
-        printf("Tabloului de structuri nu i s-a alocat memorie.\n");
-        return 0;
-    }
-
-    if(IS_FREED && i >= 2) {
-        printf("Memoria alocată pentru tablou a fost eliberată, iar operații cu dânsul pot fi imprevizibile.\n");
-        return(0);
-    }
-    
-    if(!IS_INITIALIZED && i >= 3) {
-        printf("Tabloul nu a fost inițializat.\n");
-        return 0;
-    }
-
-
-    return 1;
-}
-
-void showComputer(int i) {
-    printf("\nComputerul %d:\n", i);
-
-    printf("\t1.Modelul: %s;\n", COMPUTERE[i].modelul);
-
-    printf("\t2.Procesorul: %s;\n", COMPUTERE[i].procesorul);
-
-    printf("\t3.Memoria: %f GB;\n", COMPUTERE[i].memoria);
-
-    printf("\t4.Viteza: %f MHz;\n", COMPUTERE[i].viteza);
-
-    printf("\t5.Prețul: %f MDL.\n", COMPUTERE[i].pretul);
-}
-
-void show() {
-
-    for (int i = 0; i < SIZE; i++) {
-        showComputer(i);
+    fclose(out);
+    if (elements_written == 0)
+    {
+        printf("s-a produs o eroare in procesul de scriere a datelor.");
+        return;
     }
 }
 
-int push() {
-    SIZE++;
-
-    COMPUTERE = (Computer *)realloc(COMPUTERE, SIZE * sizeof(Computer));
-
-    if(!addValues(SIZE - 1)){
-        printf("Valoare invalidă.\n");
-        return(0);
-    }
-
-    if(COMPUTERE == NULL) {
-        printf("A eșuat realocarea memoriei pentru tabloul de structuri.");
-    }
-}
-
-int modify() {
-
-    printf("\nElementele tabloului:\n");
-
-    for (int i = 0; i < SIZE; i++) {
-        printf("%d: modelul %s\n", i, COMPUTERE[i].modelul);
-    }
-
-    int i = 0;
-    printf("\nIntroduceți numărul elementului pe care doriți să-l modificați: ");
-    if(!scanf("%d", &i)){
-        printf("Valoare invalidă.\n");
-        return(0);
-    }
-
-    if (i >= SIZE || i < 0) {
-        printf("Elementul %d nu se află în tablou\n", i);
-        return(1);
-    }
-
-    showComputer(i);
-
-    int j = 0;
-    printf("\nCe proprietate doriți să schimbați? (1-5/sau 0 pentru tot)\n");
-    if(!scanf("%d", &j)){
-        printf("Valoare invalidă.\n");
-        return(0);
-    }
-
-    switch(j){
-        case 1: scanf("%*c");
-                printf("\nCare e modelul computerului %d?\n", i);
-                fgets(COMPUTERE[i].modelul, sizeof(COMPUTERE[i].modelul), stdin);
-                COMPUTERE[i].modelul[ strlen(COMPUTERE[i].modelul) - 1] = '\0';
-                break;
-
-        case 2: scanf("%*c");
-                printf("\nCe procesor are computerul %d?\n", i);
-                fgets(COMPUTERE[i].procesorul, sizeof(COMPUTERE[i].procesorul), stdin);
-                COMPUTERE[i].procesorul[ strlen(COMPUTERE[i].procesorul) - 1] = '\0';
-                break;
-
-        case 3: scanf("%*c");
-                printf("\nCâtă memorie are computerul %d? (GB)\n", i);
-                if(!scanf("%f", &COMPUTERE[i].memoria)) {
-                    return(0);
-                }
-                break;
-
-        case 4: scanf("%*c");
-                printf("\nCe viteză are computerul %d? (MHz)\n", i);
-                if(!scanf("%f", &COMPUTERE[i].viteza)){
-                    return(0);
-                }
-                break;
-
-        case 5: scanf("%*c");
-                printf("\nCare e prețul computerului %d? (MDL)\n", i);
-                if(!scanf("%f", &COMPUTERE[i].pretul)){
-                    return(0);
-                }
-                break;
-        
-        case 0: addValues(i);
-                break;
-
-        default: printf("\nNu există proprietatea cu numarul %d\n", j);
-    }
-
-    return (1);
-}
-
-void modelSearch(char *cmp) {
-
-    printf("\nComputere de modelul căutat de voi:\n");
-    for (int i = 0; i < SIZE; i++) {
-        if(strcmp(COMPUTERE[i].modelul, cmp) == 0){
-            printf("%d\n", i);
-        }
-    }
-}
-
-void procSearch(char *cmp) {
-
-    printf("\nComputere cu procesorul căutat de voi:\n");
-    for (int i = 0; i < SIZE; i++) {
-        if(strcmp(COMPUTERE[i].procesorul, cmp) == 0){
-            printf("%d\n", i);
-        }
-    }
-}
-
-void memSearch(float cmp) {
-
-    printf("\nComputere cu memoria căutată de voi:\n");
-    for (int i = 0; i < SIZE; i++) {
-        if(COMPUTERE[i].memoria == cmp){
-            printf("%d\n", i);
-        }
-    }
-}
-
-void spdSearch(float cmp) {
-
-    printf("\nComputere cu viteza căutată de voi:\n");
-    for (int i = 0; i < SIZE; i++) {
-        if(COMPUTERE[i].viteza == cmp){
-            printf("%d\n", i);
-        }
-    }
-}
-
-void priceSearch(float cmp) {
-
-    printf("\nComputere cu prețul căutat de voi:\n");
-    for (int i = 0; i < SIZE; i++) {
-        if(COMPUTERE[i].pretul == cmp){
-            printf("%d\n", i);
-        }
-    }
-}
-
-int search() {
-    printf("\nProprietăți disponibile: \n");
-    printf("1.modelul\n2.procesorul\n3.memoria\n4.viteza\n5.pretul\n");
-    printf("\nPrin care proprietate doriți să căutați?\n");
-
-    int i;
-    if(!scanf("%d", &i)){
-        printf("Valoare invalidă.\n");
-        return(0);
-    }
-
-    char scmp[100];
-    float fcmp;
-
-    scanf("%*c");
-    switch(i){
-        case 1: printf("\nCe model doriți să căutați?\n");
-                fgets(scmp, sizeof(scmp), stdin);
-                scmp[ strlen(scmp) - 1] = '\0';
-                modelSearch(scmp);
-            break;
-
-        case 2: printf("\nCe procesor doriți să căutați?\n");
-                fgets(scmp, sizeof(scmp), stdin);
-                scmp[ strlen(scmp) - 1] = '\0';
-                procSearch(scmp);
-            break;
-
-        case 3: printf("\nCe memorie doriți să căutați?\n");
-                if(!scanf("%f", &fcmp)){
-                    printf("Valoare invalidă.\n");
-                    return(0);
-                }
-                memSearch(fcmp);
-            break;
-
-        case 4: printf("\nCe viteză doriți să căutați?\n");
-                if(!scanf("%f", &fcmp)){
-                    printf("Valoare invalidă.\n");
-                    return(0);
-                }
-                spdSearch(fcmp);
-            break;
-
-        case 5: printf("\nCe preț doriți să căutați?\n");
-                if(!scanf("%f", &fcmp)){
-                    printf("Valoare invalidă.\n");
-                    return(0);
-                }
-                priceSearch(fcmp);
-            break;
-        default: printf("Proprietatea cu numărul dat nu există.\n");
-    }
-    return(1);
-}
-
-void modelSort() {
+void show()
+{
     Computer tmp;
+    FILE *in;
+    fopen_s(&in, "compuri.bin", "rb");
+    if (in == NULL)
+    {
+        printf("s-a produs o eroare in procesul deschiderii fisierului pentru citire.");
+        fclose(in);
+        return;
+    }
 
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = i + 1; j < SIZE; j++) {
-
-            if(strcmp(COMPUTERE[i].modelul, COMPUTERE[j].modelul) > 0) {
-                tmp = COMPUTERE[i];
-                COMPUTERE[i] = COMPUTERE[j];
-                COMPUTERE[j] = tmp;
-            }
-        }
+    int lim;
+    size_t elements_read = 0;
+    elements_read += fread(&lim, sizeof(int), 1, in);
+    elements_read += fread(&tmp, sizeof(Computer), 1, in);
+    for (int i = 0; !feof(in); i++)
+    {
+        printf("\ncomputerul %d", i);
+        printStruct(tmp);
+        elements_read += fread(&tmp, sizeof(Computer), 1, in);
+    }
+    fclose(in);
+    if (elements_read == 0)
+    {
+        printf("s-a produs o eroare in procesul de citire a datelor.");
+        return;
     }
 }
 
-void procSort() {
+void push()
+{
+    FILE *f;
+    fopen_s(&f, "compuri.bin", "rb+");
+    if (f == NULL)
+    {
+        printf("s-a produs o eroare in procesul deschiderii fisierului pentru citire si scriere.");
+        fclose(f);
+        return;
+    }
+
+    int lim;
+    size_t elements_read = 0;
+    size_t elements_written = 0;
+    fseek(f, 0, SEEK_SET);
+    elements_read += fread(&lim, sizeof(int), 1, f);
+    if (elements_read == 0)
+    {
+        printf("s-a produs o eroare in procesul de citire a datelor.");
+        fclose(f);
+        return;
+    }
+    lim++;
+    fseek(f, 0, SEEK_SET);
+    elements_written += fwrite(&lim, sizeof(int), 1, f);
+
     Computer tmp;
+    introduceStruct(&tmp);
+    fseek(f, 0, SEEK_END);
+    elements_written += fwrite(&tmp, sizeof(Computer), 1, f);
 
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = i + 1; j < SIZE; j++) {
-
-            if(strcmp(COMPUTERE[i].procesorul, COMPUTERE[j].procesorul) > 0) {
-                tmp = COMPUTERE[i];
-                COMPUTERE[i] = COMPUTERE[j];
-                COMPUTERE[j] = tmp;
-            }
-        }
+    fclose(f);
+    if (elements_written == 0)
+    {
+        printf("s-a produs o eroare in procesul de scriere a datelor.");
+        return;
     }
 }
 
-void memSort() {
-    Computer tmp;
-
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = i + 1; j < SIZE; j++) {
-
-            if(COMPUTERE[i].memoria < COMPUTERE[j].memoria) {
-                tmp = COMPUTERE[i];
-                COMPUTERE[i] = COMPUTERE[j];
-                COMPUTERE[j] = tmp;
-            }
-        }
-    }
-}
-
-void spdSort() {
-    Computer tmp;
-
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = i + 1; j < SIZE; j++) {
-
-            if(COMPUTERE[i].viteza < COMPUTERE[j].viteza) {
-                tmp = COMPUTERE[i];
-                COMPUTERE[i] = COMPUTERE[j];
-                COMPUTERE[j] = tmp;
-            }
-        }
-    }
-}
-
-void prcSort() {
-    Computer tmp;
-
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = i + 1; j < SIZE; j++) {
-
-            if(COMPUTERE[i].pretul < COMPUTERE[j].pretul) {
-                tmp = COMPUTERE[i];
-                COMPUTERE[i] = COMPUTERE[j];
-                COMPUTERE[j] = tmp;
-            }
-        }
-    }
-}
-
-int sort() {
-    printf("\nProprietăți disponibile: \n");
-    printf("1.modelul\n2.procesorul\n3.memoria\n4.viteza\n5.pretul\n");
-    printf("\nDupă ce proprietate doriți să sortați?\n");
-
-    int i;
-    if(!scanf("%d", &i)){
-        printf("Valoare invalidă.\n");
-        return(0);
-    }
-
-    scanf("%*c");
-    switch(i){
-        case 1: modelSort();
-            break;
-
-        case 2: procSort();
-            break;
-
-        case 3: memSort();
-            break;
-
-        case 4: spdSort();
-            break;
-
-        case 5: prcSort();
-            break;
-
-        default: printf("Proprietatea cu numărul dat nu există.\n");
-    }
-    return(1);
-}
-
-int delete() {
+void modify()
+{
     show();
-    printf("\nCe element ați dori sa eliminați?\n");
-
-    int del;
-    if(!scanf("%d", &del) || del >= SIZE || del < 0){
-        printf("Valoare invalidă.\n");
-        return(0);
+    FILE *f;
+    fopen_s(&f, "compuri.bin", "rb+");
+    if (f == NULL)
+    {
+        printf("s-a produs o eroare in procesul deschiderii fisierului pentru citire si scriere.");
+        fclose(f);
+        return;
+    }
+    int lim;
+    fread(&lim, sizeof(int), 1, f);
+    printf("\nnumarul computerului care va fi modificat: ");
+    int choice;
+    if (!scanf("%d", &choice) || choice >= lim)
+    {
+        printf("\bvaloare invalida.");
+        fclose(f);
+        return;
     }
 
-    Computer *tmp;
-    tmp = (Computer *)malloc((SIZE - 1) * sizeof(Computer));
+    size_t elements_written = 0;
+    Computer tmp;
+    introduceStruct(&tmp);
+    fseek(f, (sizeof(Computer) * choice + sizeof(int)), SEEK_SET);
+    elements_written += fwrite(&tmp, sizeof(Computer), 1, f);
 
-    if(tmp == NULL) {
-        printf("A eșuat alocarea memoriei pentru noul tablou de structuri.");
+    fclose(f);
+    if (elements_written == 0)
+    {
+        printf("s-a produs o eroare in procesul de scriere a datelor.");
+        return;
     }
-    for (int i = 0, j = 0; i < SIZE; i++){
-        if(i != del){
-            tmp[j] = COMPUTERE[i];
-            j++;
-        }
-    }
-
-    SIZE--;
-    COMPUTERE = NULL;
-    COMPUTERE = tmp;
-    
 }
 
-int handleOptions(int in) {
-    switch(in) {
-        case 1: computerAlloc();
-                if(COMPUTERE == NULL){
-                    return(0);
-                }
-                break;
+void search()
+{
+    Computer tmp;
+    FILE *in;
+    fopen_s(&in, "compuri.bin", "rb");
+    if (in == NULL)
+    {
+        printf("s-a produs o eroare in procesul deschiderii fisierului pentru citire.");
+        fclose(in);
+        return;
+    }
 
-        case 2: if (validityCheck(2)){
-                    if(!introduce()){
-                        return(0);
-                    }
-                }
-                break;
+    int choice;
+    printf("\ncampuri disponibile:\n1.modelul\n2.pretul\n");
+    printf("\ncampul cautat: ");
+    if (!scanf("%d", &choice) || choice > 2 || choice < 1)
+    {
+        printf("\nvaloare invalida.\n");
+        fclose(in);
+        return;
+    }
+    show();
 
-        case 3: if(validityCheck(3)) {
-                    show();
-                }
-                break;
+    char sModel[20];
+    float sPrice;
+    printf("\nvaloare cautata: ");
+    switch (choice)
+    {
+    case 1:
+        if (!scanf("%s", sModel))
+        {
+            printf("\nvaloare invalida.\n");
+            fclose(in);
+            return;
+        }
+        break;
+    case 2:
+        if (!scanf("%f", &sPrice))
+        {
+            printf("\nvaloare invalida.\n");
+            fclose(in);
+            return;
+        }
+        break;
+    default:
+        break;
+    }
 
-        case 4: if(validityCheck(3)){
-                    if(!push()) {
-                        return (0);
-                    }
-                }
-                break;
+    int lim;
+    size_t elements_read = 0;
+    elements_read += fread(&lim, sizeof(int), 1, in);
+    elements_read += fread(&tmp, sizeof(Computer), 1, in);
+    for (int i = 0; !feof(in); i++)
+    {
+        if (choice == 1 && strcmp(tmp.modelul, sModel) == 0)
+        {
+            printf("\ncomputerul %d", i);
+            printStruct(tmp);
+        }
+        else if (choice == 2 && tmp.pretul == sPrice)
+        {
+            printf("\ncomputerul %d", i);
+            printStruct(tmp);
+        }
+        elements_read += fread(&tmp, sizeof(Computer), 1, in);
+    }
+    fclose(in);
+    if (elements_read == 0)
+    {
+        printf("s-a produs o eroare in procesul de citire a datelor.");
+        return;
+    }
+}
 
-        case 5: if(validityCheck(3)){
-                    if(!modify()) {
-                        return (0);
-                    }
-                }
-                break;
+void writeAtIndex(Computer in, int i)
+{
+    FILE *f;
+    fopen_s(&f, "compuri.bin", "rb+");
+    if (f == NULL)
+    {
+        printf("s-a produs o eroare in procesul deschiderii fisierului pentru citire si scriere.");
+        fclose(f);
+        return;
+    }
 
-        case 6: if(validityCheck(3)) {
-                   if(!search()) {
-                       return(0);
-                   } 
-                }
-                break;
+    size_t elements_written = 0;
+    fseek(f, (sizeof(Computer) * i + sizeof(int)), SEEK_SET);
+    elements_written += fwrite(&in, sizeof(Computer), 1, f);
 
-        case 7: if(validityCheck(3)) {
-                    if(!sort()) {
-                        return(0);
-                    }
-                }
-                break;
+    fclose(f);
+    if (elements_written == 0)
+    {
+        printf("s-a produs o eroare in procesul de scriere a datelor.");
+        return;
+    }
+}
 
-        case 8: if(validityCheck(3)) {
-                    if(!delete()) {
-                        return(0);
-                    }
-                }
-                break;
+void sort()
+{
+    FILE *in;
+    fopen_s(&in, "compuri.bin", "rb");
+    if (in == NULL)
+    {
+        printf("s-a produs o eroare in procesul deschiderii fisierului pentru citire.");
+        fclose(in);
+        return;
+    }
 
-        case 9: if(validityCheck(2)) {
-                    free(COMPUTERE);
-                    IS_FREED = 1;
-                    IS_INITIALIZED = 0;
-                }
-                break;
+    int choice;
+    printf("\ncampuri disponibile:\n1.modelul\n2.pretul\n");
+    printf("\ncampul sortat: ");
+    if (!scanf("%d", &choice) || choice > 2 || choice < 0)
+    {
+        printf("\nvaloare invalida.\n");
+        fclose(in);
+        return;
+    }
 
-        case 0:
-            return 1;
-        default:printf("Valoarea %d nu există în meniul de opțiuni, introduceți o altă valoare.\n", in);
+    int lim;
+    size_t elements_read = 0;
+    elements_read += fread(&lim, sizeof(int), 1, in);
+    Computer tmp[lim];
+    for (int i = 0; !feof(in); i++)
+    {
+        elements_read += fread(&tmp[i], sizeof(Computer), 1, in);
+    }
+    fclose(in);
+    if (elements_read == 0)
+    {
+        printf("s-a produs o eroare in procesul de citire a datelor.");
+        return;
+    }
+
+    Computer replace;
+    for (int i = 0; i < lim; i++)
+    {
+        for (int j = i + 1; j < lim; j++)
+        {
+
+            if ((strcmp(tmp[i].modelul, tmp[j].modelul) > 0 && choice == 1) ||
+                (tmp[i].pretul < tmp[j].pretul && choice == 2))
+            {
+                replace = tmp[i];
+                tmp[i] = tmp[j];
+                tmp[j] = replace;
+                writeAtIndex(tmp[i], i);
+                writeAtIndex(tmp[j], j);
+            }
+        }
+    }
+}
+
+void deleteStruct()
+{
+    FILE *from;
+    fopen_s(&from, "compuri.bin", "rb");
+    if (from == NULL)
+    {
+        printf("s-a produs o eroare in procesul deschiderii fisierului pentru citire si scriere.");
+        fclose(from);
+        return;
+    }
+
+    int lim;
+    size_t elements_read = 0;
+    fseek(from, 0, SEEK_SET);
+    elements_read += fread(&lim, sizeof(int), 1, from);
+
+    Computer tmp[lim];
+    for (int i = 0; !feof(from); i++)
+    {
+        elements_read += fread(&tmp[i], sizeof(Computer), 1, from);
+    }
+
+    fclose(from);
+    if (elements_read == 0)
+    {
+        printf("s-a produs o eroare in procesul de citire a datelor.");
+        return;
+    }
+
+    show();
+    printf("\nnumarul computerului care va fi sters: ");
+    int choice;
+    if (!scanf("%d", &choice) || choice >= lim)
+    {
+        printf("\bvaloare invalida.");
+        return;
+    }
+
+    FILE *to;
+    fopen_s(&to, "tmp.bin", "wb");
+    if (to == NULL)
+    {
+        printf("s-a produs o eroare in procesul deschiderii fisierului pentru citire si scriere.");
+        fclose(to);
+        return;
+    }
+
+    lim--;
+    size_t elements_written = 0;
+    elements_written += fwrite(&lim, sizeof(int), 1, to);
+    for (int i = 0; i < lim + 1; i++)
+    {
+        if (i != choice)
+            elements_written += fwrite(&tmp[i], sizeof(Computer), 1, to);
+    }
+
+    fclose(to);
+    if (elements_written == 0)
+    {
+        printf("s-a produs o eroare in procesul de scriere a datelor.");
+        return;
+    }
+
+    remove("compuri.bin");
+    rename("tmp.bin", "compuri.bin");
+}
+
+int handleOptions(int in)
+{
+    switch (in)
+    {
+    case 1:
+        printf("\ntoate datele aflate acum pe fisier vor fi sterse. sunteti sigur? (1/0) ");
+        int choice;
+        if (!scanf("%d", &choice) || (choice != 0 && choice != 1))
+        {
+            printf("\nvaloare invalida.\n");
+        }
+        else if (choice == 1)
+            createAndIntroduce();
+        break;
+    case 2:
+        show();
+        break;
+    case 3:
+        push();
+        break;
+    case 4:
+        modify();
+        break;
+    case 5:
+        search();
+        break;
+    case 6:
+        sort();
+        break;
+    case 7:
+        deleteStruct();
+        break;
+    case 0:
+        return 1;
+    default:
+        printf("Valoarea %d nu exista in meniul de optiuni, introduceti o alta valoare.\n", in);
     }
 
     return (1);
 }
 
-int evaluate() {
+int handleInput()
+{
     int in;
 
-    do{
+    do
+    {
         showOptions();
-        printf("\nCe operațiune doriți să efectuați?\n");
+        printf("\nCe operatiune doriti sa efectuati?\n");
 
-        if(!scanf("%d", &in)){
-            printf("Valoare invalidă.\n");
+        if (!scanf("%d", &in))
+        {
+            printf("\nvaloare invalida.\n");
             return (0);
         }
-        else if(!handleOptions(in)){
-            return(0);
+        else if (!handleOptions(in))
+        {
+            return (0);
         }
 
-    }  while(in != 0);
+    } while (in != 0);
 
     return (1);
 }
 
-int main () {
+int main()
+{
 
-    if (!evaluate()){
-        return(1);
+    if (!handleInput())
+    {
+        return (1);
     }
 
     return (0);
 }
-
-
-/*
-Pentru tabloul unidimensional dat cu elemente de tip structură (conform
-variantelor) să se afișeze la ecran următorul meniu de opțiuni:
-1. Alocarea dinamică a memoriei pentru tabloul de structuri.
-2. Introducerea elementelor tabloului de la tastatură.
-3. Afișarea elementelor tabloului la ecran.
-4. Adăugarea unui element nou la sfârșit.
-5. Modificarea elementului tabloului.
-6. Căutarea elementului tabloului.
-7. Sortarea tabloului.
-8. Eliminarea elementului indicat din tablou.
-9. Eliberarea memoriei alocate pentru tablou.
-0. Ieșire din program.
-Să se elaboreze funcțiile pentru implementarea opțiunilor meniului.
-*/
-
-/*
-15. Structura Computer cu câmpurile: modelul, procesorul, memoria, viteza, prețul.
-*/
