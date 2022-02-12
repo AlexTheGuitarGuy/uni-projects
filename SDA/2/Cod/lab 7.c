@@ -418,11 +418,12 @@ void deleteStruct()
 
 int handleOptions(int in)
 {
+    int choice;
     switch (in)
     {
     case 1:
         printf("\ntoate datele aflate acum pe fisier vor fi sterse. sunteti sigur? (1/0) ");
-        int choice;
+
         if (!scanf("%d", &choice) || (choice != 0 && choice != 1))
         {
             printf("\nvaloare invalida.\n");
@@ -447,6 +448,15 @@ int handleOptions(int in)
         break;
     case 7:
         deleteStruct();
+        break;
+    case 8:
+        printf("\ntoate datele aflate acum pe fisier vor fi sterse. sunteti sigur? (1/0) ");
+        if (!scanf("%d", &choice) || (choice != 0 && choice != 1))
+        {
+            printf("\nvaloare invalida.\n");
+        }
+        else if (choice == 1)
+            remove("compuri.bin");
         break;
     case 0:
         return 1;
