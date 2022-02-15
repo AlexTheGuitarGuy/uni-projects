@@ -90,18 +90,17 @@ void Graph::print()
 
 void Graph::DFS_helper(int s, bool *visited)
 {
-    cout << "Varf actual: " << s << endl;
+
+    cout << s << " ";
     visited[s] = true;
 
     for (auto i = adj[s].begin(); i != adj[s].end(); i++)
     {
         if (!visited[*i])
         {
-            cout << "Parcurgere de la varful " << s << " la varful " << *i << endl;
             DFS_helper(*i, visited);
         }
     }
-    cout << "Intoarcere de la varful " << s << endl;
 }
 
 void Graph::DFS(int s)
