@@ -1,0 +1,10 @@
+ion 1 2 3 4 5
+vitalie 6 6 6 6 9
+sanea 4 2 0 6 9
+bascov 1 3 3 7 8
+ion 8 8 8 8 8
+tudor 6 8 6 9 8
+sanea 6 6 6 6 6
+hui 9 9 9 9 9
+penis 5 5 5 5 5
+hui 2 2 2 2 2
