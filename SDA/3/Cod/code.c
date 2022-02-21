@@ -10,14 +10,14 @@ typedef struct inElev
     char name[MAX_NAME_LEN];
     int grades[5];
 } inElev;
-const char *INPUT_TMP = "%s %d %d %d %d %d\n";
+#define INPUT_TMP "%s %d %d %d %d %d\n"
 
 typedef struct outElev
 {
     char name[MAX_NAME_LEN];
     float mean;
 } outElev;
-const char *OUTPUT_TMP = "%s %f\n";
+#define OUTPUT_TMP "%s %f\n"
 
 int studentNum = 0;
 char repeated[MAX_STUDENT_NUM / 2][MAX_STUDENT_NUM];
