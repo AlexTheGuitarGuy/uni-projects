@@ -69,6 +69,9 @@ int main()
         fscanf(avg, "%f", &average);
         printf("\n%f", average);
     }
+
+    fclose(out);
+    fclose(avg);
     return 0;
 }
 
