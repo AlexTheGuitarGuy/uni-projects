@@ -5,6 +5,6 @@ bascov 1 3 3 7 8
 ion 8 8 8 8 8
 tudor 6 8 6 9 8
 sanea 6 6 6 6 6
-hui 9 9 9 9 9
-penis 5 5 5 5 5
-hui 2 2 2 2 2
+vladimir 9 9 9 9 9
+vasilie 5 5 5 5 5
+vladimir 2 2 2 2 2

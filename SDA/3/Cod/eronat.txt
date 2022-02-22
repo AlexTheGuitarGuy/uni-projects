@@ -2,5 +2,5 @@ ion 1 2 3 4 5
 sanea 4 2 0 6 9
 ion 8 8 8 8 8
 sanea 6 6 6 6 6
-hui 9 9 9 9 9
-hui 2 2 2 2 2
+vladimir 9 9 9 9 9
+vladimir 2 2 2 2 2
