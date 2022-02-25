@@ -134,7 +134,7 @@ void search()
         if ((choice == 1 && strcmp(tmp->data.denumirea, sName) == 0) ||
             (choice == 2 && tmp->data.anul == sYear))
         {
-            printf("\nFilmul %d", i);
+            printf("\nfilmul %d", i);
             show_struct(tmp->data);
         }
     }
