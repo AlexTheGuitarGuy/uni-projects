@@ -74,23 +74,20 @@ def playfair(
             return res.split()
 
         text = processText()
+        expr = '+'
+        loopx = 0
+        loopy = 0
     else:
         def processText():
             res = iter(text)
             res = ' '.join(a+b for a, b in zip(res, res))
             return res.split()
         text = processText()
-
-    res = ''
-
-    if encrypt:
-        expr = '+'
-        loopx = 0
-        loopy = 0
-    else:
         expr = '-'
         loopx = len(key) - 1
         loopy = len(key[0]) - 1
+
+    res = ''
 
     for a, b in text:
         a_i = np.where(key == a)
