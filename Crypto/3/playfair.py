@@ -49,9 +49,9 @@ def playfair(
 
             res = iter(text)
             res = ' '.join(a+b for a, b in zip(res, res))
+
             if len(text) % 2 != 0:
                 res += ' ' + text[len(text) - 1]
-                pass
 
             for i in range(0, len(res)):
                 if(res[i] == res[i - 1]):
@@ -82,6 +82,7 @@ def playfair(
             res = iter(text)
             res = ' '.join(a+b for a, b in zip(res, res))
             return res.split()
+
         text = processText()
         expr = '-'
         loopx = len(key) - 1
@@ -95,22 +96,30 @@ def playfair(
 
         if (b_i[0] == a_i[0]):
             try:
-                res += str(key[(a_i[0], eval(str(int(a_i[1])) + expr + '1'))])
+                res += str(key[(a_i[0],
+                                eval(str(int(a_i[1])) + expr + '1'))])
             except IndexError:
                 res += str(key[(a_i[0], loopy)])
+
             try:
-                res += str(key[(b_i[0], eval(str(int(b_i[1])) + expr + '1'))])
+                res += str(key[(b_i[0],
+                                eval(str(int(b_i[1])) + expr + '1'))])
             except IndexError:
                 res += str(key[(b_i[0], loopy)])
+
         elif (b_i[1] == a_i[1]):
             try:
-                res += str(key[(eval(str(int(a_i[0])) + expr + '1'), a_i[1])])
+                res += str(key[(eval(str(int(a_i[0])) + expr + '1'),
+                                a_i[1])])
             except IndexError:
                 res += str(key[(loopx, a_i[1])])
+
             try:
-                res += str(key[(eval(str(int(b_i[0])) + expr + '1'), b_i[1])])
+                res += str(key[(eval(str(int(b_i[0])) + expr + '1'),
+                                b_i[1])])
             except IndexError:
                 res += str(key[(loopx, b_i[1])])
+
         else:
             res += str(key[(b_i[0], a_i[1])])
             res += str(key[(a_i[0], b_i[1])])
