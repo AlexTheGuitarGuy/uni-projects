@@ -44,7 +44,7 @@ def vigenere_decrypt(text, key):
 
 def main():
     encrypt = True if input(
-        'doriti sa criptati sau decriptati? (1/0)') == '1' else False
+        'doriti sa criptati sau decriptati? (1/0) ') == '1' else False
     key = input('cheie: ').replace(' ', '').upper()
     text = input('text: ').replace(' ', '').upper()
 

@@ -53,7 +53,7 @@ def playfair(
             if len(text) % 2 != 0:
                 res += ' ' + text[len(text) - 1]
 
-            for i in range(0, len(res)):
+            for i in range(len(res)):
                 if(res[i] == res[i - 1]):
                     res = res[:i] + obfuscatingChar() + res[i:]
                     res = res.replace(' ', '')
