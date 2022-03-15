@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -18,13 +19,15 @@ private:
 public:
     Graph(int E);
     void introduce();
-    void printDist(int dist[], vector<vector<int>> paths, int n);
-    void bellmanFord(int from);
+    void printDist(int dist[], vector<vector<int>> paths, int n, bool isLong);
+    void bellmanFord(int from, bool isLong);
+    bool isValid(int root);
 };
 
 Graph::Graph(int e)
 {
     E = e;
+    introduce();
 }
 
 void Graph::introduce()
@@ -37,12 +40,12 @@ void Graph::introduce()
         int cost;
         while (true)
         {
-            cout << "Ce varfuri uneste muchia " << e << "?\n";
+            std::cout << "Ce varfuri uneste muchia " << e << "?\n";
             cin >> from;
             cin >> to;
             if (from < 0 || to < 0)
             {
-                cout << "Valoare invalida, introduceti din nou" << endl;
+                std::cout << "Valoare invalida, introduceti din nou" << endl;
             }
             else
             {
@@ -50,7 +53,7 @@ void Graph::introduce()
                     V = from;
                 if (to > V)
                     V = to;
-                cout << "Ponderea: ";
+                std::cout << "Ponderea: ";
                 cin >> cost;
                 break;
             }
@@ -64,26 +67,32 @@ void Graph::introduce()
     V++;
 }
 
-void Graph::printDist(int dist[], vector<vector<int>> paths, int n)
+void Graph::printDist(int dist[], vector<vector<int>> paths, int n, bool isLong = false)
 {
 
-    cout << endl
-         << "Varful" << '\t' << "Distanta" << '\t' << "Drum";
+    std::cout << endl
+              << "Varful" << '\t' << "Distanta" << '\t' << "Drum";
 
     for (int i = 0; i < n; ++i)
     {
-        cout << endl
-             << i << "\t" << dist[i] << "\t\t";
+        if (isLong && dist[i] != INT_MAX)
+            std::cout << endl
+                      << i << "\t" << -dist[i] << "\t\t";
+        else
+            std::cout << endl
+                      << i << "\t" << dist[i] << "\t\t";
         if (dist[i] != INT_MAX && dist[i] != INT_MIN)
         {
             for (int j : paths[i])
-                cout << j << "->";
-            cout << i;
+                std::cout << j << "->";
+            std::cout << i;
         }
+        else
+            break;
     }
 }
 
-void Graph::bellmanFord(int from)
+void Graph::bellmanFord(int from, bool isLong = false)
 {
     if (from < V && from >= 0)
     {
@@ -105,11 +114,17 @@ void Graph::bellmanFord(int from)
             {
                 int u = edge[j].from;
                 int v = edge[j].to;
-                int cost = edge[j].cost;
+                int cost;
+                if (isLong)
+                    cost = -abs(edge[j].cost);
+                else
+                    cost = edge[j].cost;
 
                 if (dist[u] != INT_MAX && dist[u] + cost < dist[v])
                 {
-                    paths[v].push_back(u);
+                    if ((!paths[v].empty() && u != paths[v].back()) || paths[v].empty())
+                        paths[v].push_back(u);
+
                     dist[v] = dist[u] + cost;
                     if (paths[v][0] != 0)
                     {
@@ -122,6 +137,7 @@ void Graph::bellmanFord(int from)
                 break;
         }
 
+        bool isCycle = false;
         for (int i = 0; i < E && updated == true; i++)
         {
             int u = edge[i].from;
@@ -130,44 +146,68 @@ void Graph::bellmanFord(int from)
 
             if (dist[u] != INT_MAX && dist[u] + cost < dist[v])
             {
-                dist[v] = INT_MIN;
+                if (!isLong)
+                    dist[v] = INT_MIN;
+                else
+                    dist[v] = INT_MAX;
+                isCycle = true;
             }
         }
-
-        printDist(dist, paths, V);
-        std::exit(0);
+        if (isCycle)
+            std::cout << endl
+                      << "A fost depistat un ciclu infinit.";
+        else
+            printDist(dist, paths, V, isLong);
+        return;
     }
     else
     {
-        cout << "Valoare invalida, introduceti din nou" << endl;
+        std::cout << "Valoare invalida, introduceti din nou" << endl;
         return;
     }
+}
+
+bool Graph::isValid(int root)
+{
+    if (root >= 0 && root < V)
+        return true;
+    return false;
 }
 
 int main()
 {
     int E;
 
-    cout << "Cate muchii va avea graful?" << endl;
+    std::cout << "Cate muchii va avea graful?" << endl;
     while (true)
     {
         cin >> E;
         if (E > 0)
             break;
         else
-            cout << "Valoare invalida, introduceti din nou." << endl;
+            std::cout << "Valoare invalida, introduceti din nou." << endl;
     }
-
     Graph g(E);
 
-    g.introduce();
     int root;
-    cout << endl
-         << "Care va fi elementul de la care se va incepe cautarea?" << endl;
+    std::cout << endl
+              << "Care va fi elementul de la care se va incepe cautarea?" << endl;
     while (true)
     {
         cin >> root;
-        g.bellmanFord(root);
+        if (g.isValid(root))
+        {
+            std::cout << endl
+                      << "Cel mai scrut drum:";
+            g.bellmanFord(root);
+            std::cout << endl
+                      << endl
+                      << "Cel mai lung drum:";
+            g.bellmanFord(root, true);
+            break;
+        }
+        else
+            std::cout << "Valoare invalida, introduceti din nou." << endl;
     }
 
     return 0;
