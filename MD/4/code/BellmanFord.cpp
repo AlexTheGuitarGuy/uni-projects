@@ -1,8 +1,8 @@
+#include <boost_1_78_0/boost/graph/adjacency_list.hpp>
 #include <bits/stdc++.h>
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <boost>
 
 using namespace std;
 

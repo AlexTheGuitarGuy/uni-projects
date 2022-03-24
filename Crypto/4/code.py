@@ -28,6 +28,14 @@ def printPC1():
             print(PC1[i], end=' ')
 
 
+def printBin(K):
+    for i in range(len(K)):
+        if (i + 1) % 8 == 0:
+            print(K[i], end=' ')
+        else:
+            print(K[i], end='')
+
+
 def permutate(K1):
     res = ''
     for i in range(len(PC1)):
@@ -35,8 +43,8 @@ def permutate(K1):
         print('nr. ordine:', PC1[i], 'bit:', K1[PC1[i] - 1])
 
     print('\n')
-    print('Rezultatul concatenarii bitilor, care sunt si cheia K+:')
-    print(res)
+    print('Rezultatul concatenarii bitilor, care si sunt cheia K+:')
+    printBin(res)
 
     print('\n')
     print('lungime:', len(res), 'biti')
@@ -59,10 +67,10 @@ def main():
     print('\n')
     print('Se transforma din hexadecimal in binar:')
     K1 = hexToBin(K1)
-    print(K1)
+    printBin(K1)
 
     print('\n')
-    print('Cu ajutorul tabelului PC1:')
+    print('Dupa aia, cu ajutorul tabelului PC1:')
     printPC1()
 
     print('\n')
