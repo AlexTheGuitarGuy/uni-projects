@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "array": "c",
+        "deque": "c",
+        "forward_list": "c",
+        "list": "c",
+        "vector": "c",
+        "string_view": "c",
+        "rope": "c",
+        "slist": "c",
+        "span": "c",
+        "*.ipp": "c"
+    }
+}
