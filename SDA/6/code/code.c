@@ -19,6 +19,7 @@ Computer introduce_struct()
     scanf("%f", &in.viteza);
     printf("pretul: ");
     scanf("%f", &in.pretul);
+    printf("\n");
     return in;
 }
 
