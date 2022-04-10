@@ -1,0 +1,221 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include "includes.h"
+
+Node *root = NULL;
+
+Computer introduce_struct()
+{
+    Computer in;
+    printf("modelul: ");
+    scanf("%s", in.modelul);
+    printf("procesorul: ");
+    scanf("%s", in.procesorul);
+    printf("memoria: ");
+    scanf("%f", &in.memoria);
+    printf("viteza: ");
+    scanf("%f", &in.viteza);
+    printf("pretul: ");
+    scanf("%f", &in.pretul);
+    return in;
+}
+
+Node *createNode(Computer value)
+{
+    Node *result = malloc(sizeof(Node));
+    if (result != NULL)
+    {
+        result->left = NULL;
+        result->right = NULL;
+        result->value = value;
+    }
+    return result;
+}
+
+bool insertStruct(Node **rootptr, Computer value)
+{
+    Node *root = *rootptr;
+
+    if (root == NULL)
+    {
+        (*rootptr) = createNode(value);
+        return true;
+    }
+
+    if (strcmp(value.modelul, root->value.modelul) == 0)
+        return false;
+
+    if (strcmp(value.modelul, root->value.modelul) < 0)
+        return insertStruct(&(root->left), value);
+    else
+        return insertStruct(&(root->right), value);
+}
+
+int treeNodeNum = 0;
+void createTree()
+{
+
+    while (true)
+    {
+        Computer in;
+        printf("valoarea nodului %d:\n", treeNodeNum);
+        in = introduce_struct();
+
+        if (!insertStruct(&root, in))
+            printf("valoarea data deja exista.\n");
+        treeNodeNum++;
+
+        int choice;
+        printf("doriti sa mai introduceti o structura? (1/0) ");
+        if (scanf("%d", &choice) && choice == 0)
+            return;
+        else if (choice != 1)
+            break;
+    }
+}
+
+void printTabs(int len)
+{
+    for (int i = 0; i < len; i++)
+    {
+        printf("\t");
+    }
+}
+
+void show_struct(Computer in, int level)
+{
+    printTabs(level);
+    printf("modelul: ");
+    printf("%s\n", in.modelul);
+
+    printTabs(level);
+    printf("procesorul: ");
+    printf("%s\n", in.procesorul);
+
+    printTabs(level);
+    printf("memoria: ");
+    printf("%f\n", in.memoria);
+
+    printTabs(level);
+    printf("viteza: ");
+    printf("%f\n", in.viteza);
+
+    printTabs(level);
+    printf("pretul: ");
+    printf("%f\n", in.pretul);
+}
+
+void printTreeRec(Node *root, int level)
+{
+    if (root == NULL)
+    {
+        printTabs(level);
+        printf("<empty>\n");
+        return;
+    }
+
+    show_struct(root->value, level);
+
+    printTabs(level);
+    printf("left\n");
+
+    printTreeRec(root->left, level + 1);
+
+    printTabs(level);
+    printf("right\n");
+
+    printTreeRec(root->right, level + 1);
+
+    printTabs(level);
+    printf("done\n");
+}
+
+void printTree()
+{
+    printTreeRec(root, 0);
+}
+
+Node *findStructRec(Node *root, char *value)
+{
+    if (root == NULL)
+        return NULL;
+    if (strcmp(root->value.modelul, value) == 0)
+        return root;
+
+    if (strcmp(value, root->value.modelul) < 0)
+        return findStructRec(root->left, value);
+    else
+        return findStructRec(root->right, value);
+}
+
+Node *findStruct(char *value)
+{
+    return findStructRec(root, value);
+}
+
+void modify(char *value)
+{
+    Node *change;
+
+    change = findStruct(value);
+
+    change->value = introduce_struct();
+}
+
+int countNodesRec(Node *root)
+{
+    int res = 0;
+    if (root->right != NULL)
+        res += countNodesRec(root->right) + 1;
+    if (root->left != NULL)
+        res += countNodesRec(root->left) + 1;
+
+    return res;
+}
+
+int countNodes()
+{
+    if (root != NULL)
+        return countNodesRec(root) + 1;
+    else
+        return 0;
+}
+
+int heightRec(Node *root)
+{
+    int right = 0, left = 0;
+    if (root->right != NULL)
+        right += heightRec(root->right) + 1;
+    if (root->left != NULL)
+        left += heightRec(root->left) + 1;
+
+    if (right > left)
+        return right;
+    else
+        return left;
+}
+
+int height()
+{
+    if (root != NULL)
+        return heightRec(root) + 1;
+    else
+        return 0;
+}
+
+void freeTreeRec(Node *root)
+{
+    if (!root)
+        return;
+    freeTreeRec(root->right);
+    freeTreeRec(root->left);
+
+    free(root);
+}
+
+void freeTree()
+{
+    freeTreeRec(root);
+}
