@@ -24,7 +24,7 @@ void getPath(vector<vector<int>> const parent, vector<int> const vlist, int path
     resPath.push_back(v);
 }
 
-vector<vector<int>> parse(vector<vector<int>> const &parent, int dest, int N)
+vector<vector<int>> parse(vector<vector<int>> const parent, int dest, int N)
 {
     vector<vector<int>> res(N);
 
@@ -76,13 +76,13 @@ void printPaths(vector<vector<int>> parent, int dest, vector<int> distance, vect
 {
     if (!isLong)
     {
-        cout << "Shortest distance of vertex " << dest << " from the source is "
-             << distance[dest] << ". It's paths are:\n";
+        cout << "\nShortest distance of vertex " << dest << " from the source is "
+             << distance[dest] << ". Its paths are:\n";
     }
     else
     {
-        cout << "Longest distance of vertex " << dest << " from the source is "
-             << -distance[dest] << ". It's paths are:\n";
+        cout << "\nLongest distance of vertex " << dest << " from the source is "
+             << -distance[dest] << ". Its paths are:\n";
     }
     vector<vector<int>> res = parse(parent, dest, parent.size());
     cleanPaths(res, edges);
@@ -103,7 +103,7 @@ void BellmanFord(vector<Edge> const &edges, int source, int dest, int N)
 
     // distance[] and parent[] stores shortest-path (least cost/path)
     // information. Initially all vertices except source vertex have
-    // a weight of infinity and a no parent
+    // a weight of infinity and no parent
 
     vector<int> distance(N, INT_MAX);
     distance[source] = 0;
@@ -216,7 +216,6 @@ int introduceEdges(vector<Edge> &edges)
 // main function
 int main()
 {
-    // vector of graph edges as per above diagram
     /*vector<Edge> edges =
         {
             // (x, y, w) -> edge from x to y having weight w
@@ -240,10 +239,8 @@ int main()
 
     vector<Edge> edges;
 
-    // Set maximum number of nodes in the graph
     int N = introduceEdges(edges);
 
-    // let source be vertex 0
     cout << "Care varf este sursa? ";
     int source;
     cin >> source;
@@ -251,7 +248,6 @@ int main()
     int dest;
     cin >> dest;
 
-    // run Bellman Ford Algorithm from given source
     BellmanFord(edges, source, dest, N);
     togglePathType(edges);
     BellmanFord(edges, source, dest, N);
