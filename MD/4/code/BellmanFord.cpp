@@ -1,39 +1,183 @@
-#include <bits/stdc++.h>
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <iterator>
-
+#include <iomanip>
+#include <climits>
 using namespace std;
 
-typedef struct Edge
+// Data structure to store graph edges
+struct Edge
 {
-    int from, to, cost;
-} Edge;
-
-class Graph
-{
-private:
-    int V, E;
-    vector<Edge> edge;
-
-public:
-    Graph(int E);
-    void introduce();
-    void printDist(int dist[], vector<vector<int>> paths, int n, bool isLong);
-    void bellmanFord(int from, bool isLong);
-    bool isValid(int root);
+    int source, dest, weight;
 };
 
-Graph::Graph(int e)
+bool isLong = false;
+
+// Recursive function to print the path of (just) the first given vertex from source vertex.
+void getPath(vector<vector<int>> const parent, vector<int> const vlist, int pathNum, vector<int> &resPath)
 {
-    E = e;
-    introduce();
+    if (vlist.empty())
+        return;
+
+    int v = vlist[pathNum];
+    getPath(parent, parent[v], pathNum, resPath);
+    resPath.push_back(v);
 }
 
-void Graph::introduce()
+vector<vector<int>> parse(vector<vector<int>> const &parent, int dest, int N)
 {
-    V = 0;
+    vector<vector<int>> res(N);
+
+    for (int i = 0; i < parent.size(); i++)
+    {
+        getPath(parent, parent[dest], i, res[i]);
+    }
+    return res;
+}
+
+bool isValid(int from, int to, vector<Edge> const &edges)
+{
+    for (int i = 0; i < edges.size(); i++)
+    {
+        if (from == edges[i].source && to == edges[i].dest)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void removeDuplicates(std::vector<vector<int>> &v)
+{
+    auto end = v.end();
+    for (auto it = v.begin(); it != end; ++it)
+    {
+        end = std::remove(it + 1, end, *it);
+    }
+
+    v.erase(end, v.end());
+}
+
+void cleanPaths(vector<vector<int>> &resPath, vector<Edge> const &edges)
+{
+    removeDuplicates(resPath);
+
+    for (int k = 0; k < resPath.size(); k++)
+    {
+        for (int i = 0, j = 1; j < resPath[k].size(); i++, j++)
+        {
+            if (!isValid(resPath[k][i], resPath[k][j], edges))
+                resPath.erase(resPath.begin() + k);
+        }
+    }
+}
+
+void printPaths(vector<vector<int>> parent, int dest, vector<int> distance, vector<Edge> const &edges)
+{
+    if (!isLong)
+    {
+        cout << "Shortest distance of vertex " << dest << " from the source is "
+             << distance[dest] << ". It's paths are:\n";
+    }
+    else
+    {
+        cout << "Longest distance of vertex " << dest << " from the source is "
+             << -distance[dest] << ". It's paths are:\n";
+    }
+    vector<vector<int>> res = parse(parent, dest, parent.size());
+    cleanPaths(res, edges);
+    for (int i = 0; i < res.size(); i++)
+    {
+        cout << "[ ";
+        for (int j = 0; j < res[i].size(); j++)
+            cout << res[i][j] << " ";
+        cout << "]" << endl;
+    }
+}
+
+// Function to run Bellman Ford Algorithm from given source
+void BellmanFord(vector<Edge> const &edges, int source, int dest, int N)
+{
+    // count number of edges present in the graph
+    int E = edges.size();
+
+    // distance[] and parent[] stores shortest-path (least cost/path)
+    // information. Initially all vertices except source vertex have
+    // a weight of infinity and a no parent
+
+    vector<int> distance(N, INT_MAX);
+    distance[source] = 0;
+
+    vector<vector<int>> parent(N);
+
+    int u, v, w, k = N;
+    // Relaxation step (run V-1 times)
+    while (--k)
+    {
+        for (int j = 0; j < E; j++)
+        {
+            // edge from u to v having weight w
+            u = edges[j].source, v = edges[j].dest;
+            w = edges[j].weight;
+
+            // if the distance to the dest v can be
+            // shortened by taking the edge u-> v
+            if (distance[u] != INT_MAX)
+            {
+                // if the distance to the dest v can be
+                // shortened by taking the edge u-> v
+                if (distance[u] + w < distance[v])
+                {
+                    // update distance to the new lower value
+                    distance[v] = distance[u] + w;
+                    // forget the previous parent list.
+                    parent[v].clear();
+                }
+                // if u-> v is a way to get the shortest
+                // distance to the dest v.
+                if (distance[u] + w == distance[v])
+                {
+                    // add u as a possible parent for v
+                    parent[v].push_back(u);
+                }
+            }
+        }
+    }
+
+    // Run Relaxation step once more for Nth time to
+    // check for negative-weight cycles
+    for (int i = 0; i < E; i++)
+    {
+        // edge from u to v having weight w
+        u = edges[i].source, v = edges[i].dest;
+        w = edges[i].weight;
+
+        // if the distance to the dest u can be
+        // shortened by taking the edge u-> v
+        if (distance[u] != INT_MAX && distance[u] + w < distance[v])
+        {
+            cout << "Negative Weight Cycle Found!!";
+            return;
+        }
+    }
+
+    printPaths(parent, dest, distance, edges);
+}
+
+void togglePathType(vector<Edge> &edges)
+{
+    for (int i = 0; i < edges.size(); i++)
+    {
+        edges[i].weight *= -1;
+    }
+    isLong = !isLong;
+}
+
+int introduceEdges(vector<Edge> &edges)
+{
+    int E, V = 0;
+    cout << "Cate muchii va avea graful? ";
+    cin >> E;
     for (int e = 0; e < E; e++)
     {
         int from = 0;
@@ -60,156 +204,57 @@ void Graph::introduce()
             }
         }
         Edge newEdge;
-        newEdge.from = from;
-        newEdge.to = to;
-        newEdge.cost = cost;
-        edge.push_back(newEdge);
+        newEdge.source = from;
+        newEdge.dest = to;
+        newEdge.weight = cost;
+        edges.push_back(newEdge);
     }
     V++;
+    return V;
 }
 
-void Graph::printDist(int dist[], vector<vector<int>> paths, int n, bool isLong = false)
-{
-
-    std::cout << endl
-              << "Varful" << '\t' << "Distanta" << '\t' << "Drum";
-
-    for (int i = 0; i < n; ++i)
-    {
-        if (isLong && dist[i] != INT_MAX)
-            std::cout << endl
-                      << i << "\t" << -dist[i] << "\t\t";
-        else
-            std::cout << endl
-                      << i << "\t" << dist[i] << "\t\t";
-        if (dist[i] != INT_MAX && dist[i] != INT_MIN)
-        {
-            for (int j : paths[i])
-                std::cout << j << "->";
-            std::cout << i;
-        }
-        else
-            break;
-    }
-}
-
-void Graph::bellmanFord(int from, bool isLong = false)
-{
-    if (from < V && from >= 0)
-    {
-
-        int dist[V];
-        vector<vector<int>> paths;
-        paths.resize(V);
-
-        for (int i = 0; i < V; i++)
-            dist[i] = INT_MAX;
-        dist[from] = 0;
-
-        bool updated;
-        for (int i = 1; i <= V - 1; i++)
-        {
-            updated = false;
-
-            for (int j = 0; j < E; j++)
-            {
-                int u = edge[j].from;
-                int v = edge[j].to;
-                int cost;
-                if (isLong)
-                    cost = -abs(edge[j].cost);
-                else
-                    cost = edge[j].cost;
-
-                if (dist[u] != INT_MAX && dist[u] + cost < dist[v])
-                {
-                    if ((!paths[v].empty() && u != paths[v].back()) || paths[v].empty())
-                        paths[v].push_back(u);
-
-                    dist[v] = dist[u] + cost;
-                    if (paths[v][0] != 0)
-                    {
-                        paths[v].insert(paths[v].begin(), paths[paths[v][0]].begin(), paths[paths[v][0]].end());
-                    }
-                    updated = true;
-                }
-            }
-            if (updated == false)
-                break;
-        }
-
-        bool isCycle = false;
-        for (int i = 0; i < E && updated == true; i++)
-        {
-            int u = edge[i].from;
-            int v = edge[i].to;
-            int cost = edge[i].cost;
-
-            if (dist[u] != INT_MAX && dist[u] + cost < dist[v])
-            {
-                if (!isLong)
-                    dist[v] = INT_MIN;
-                else
-                    dist[v] = INT_MAX;
-                isCycle = true;
-            }
-        }
-        if (isCycle)
-            std::cout << endl
-                      << "A fost depistat un ciclu infinit.";
-        else
-            printDist(dist, paths, V, isLong);
-        return;
-    }
-    else
-    {
-        std::cout << "Valoare invalida, introduceti din nou" << endl;
-        return;
-    }
-}
-
-bool Graph::isValid(int root)
-{
-    if (root >= 0 && root < V)
-        return true;
-    return false;
-}
-
+// main function
 int main()
 {
-    int E;
-
-    std::cout << "Cate muchii va avea graful?" << endl;
-    while (true)
-    {
-        cin >> E;
-        if (E > 0)
-            break;
-        else
-            std::cout << "Valoare invalida, introduceti din nou." << endl;
-    }
-    Graph g(E);
-
-    int root;
-    std::cout << endl
-              << "Care va fi elementul de la care se va incepe cautarea?" << endl;
-    while (true)
-    {
-        cin >> root;
-        if (g.isValid(root))
+    // vector of graph edges as per above diagram
+    /*vector<Edge> edges =
         {
-            std::cout << endl
-                      << "Cel mai scrut drum:";
-            g.bellmanFord(root);
-            std::cout << endl
-                      << endl
-                      << "Cel mai lung drum:";
-            g.bellmanFord(root, true);
-            break;
-        }
-        else
-            std::cout << "Valoare invalida, introduceti din nou." << endl;
-    }
+            // (x, y, w) -> edge from x to y having weight w
+            {0, 1, 3},
+            {0, 2, 6},
+            {0, 4, 8},
+            {1, 2, 2},
+            {1, 3, 1},
+            {2, 3, 1},
+            {2, 4, 2},
+            {2, 6, 4},
+            {3, 4, 3},
+            {3, 5, 3},
+            {3, 7, 6},
+            {4, 5, 1},
+            {4, 6, 2},
+            {4, 7, 3},
+            {5, 7, 3},
+            {6, 7, 2},
+        };*/
+
+    vector<Edge> edges;
+
+    // Set maximum number of nodes in the graph
+    int N = introduceEdges(edges);
+
+    // let source be vertex 0
+    cout << "Care varf este sursa? ";
+    int source;
+    cin >> source;
+    cout << "Care varf este destinatia? ";
+    int dest;
+    cin >> dest;
+
+    // run Bellman Ford Algorithm from given source
+    BellmanFord(edges, source, dest, N);
+    togglePathType(edges);
+    BellmanFord(edges, source, dest, N);
 
     return 0;
 }
