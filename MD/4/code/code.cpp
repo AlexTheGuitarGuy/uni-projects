@@ -219,22 +219,19 @@ int main()
     /*vector<Edge> edges =
         {
             // (x, y, w) -> edge from x to y having weight w
-            {0, 1, 3},
-            {0, 2, 6},
-            {0, 4, 8},
-            {1, 2, 2},
-            {1, 3, 1},
-            {2, 3, 1},
-            {2, 4, 2},
-            {2, 6, 4},
-            {3, 4, 3},
-            {3, 5, 3},
-            {3, 7, 6},
-            {4, 5, 1},
-            {4, 6, 2},
-            {4, 7, 3},
-            {5, 7, 3},
-            {6, 7, 2},
+            {1, 2, 5},
+            {1, 3, 3},
+            {1, 4, 5},
+            {1, 5, 6},
+            {1, 6, 8},
+            {2, 5, 4},
+            {2, 4, 1},
+            {3, 5, 2},
+            {4, 5, 3},
+            {4, 6, 5},
+            {5, 6, 4},
+            {5, 7, 6},
+            {6, 7, 5},
         };*/
 
     vector<Edge> edges;
@@ -242,10 +239,10 @@ int main()
     int N = introduceEdges(edges);
 
     cout << "Care varf este sursa? ";
-    int source;
+    int source = 1;
     cin >> source;
     cout << "Care varf este destinatia? ";
-    int dest;
+    int dest = 7;
     cin >> dest;
 
     BellmanFord(edges, source, dest, N);
