@@ -4,7 +4,7 @@
 #include <string.h>
 #include "includes.h"
 
-Node *root = NULL;
+Nod *radacina = NULL;
 
 Film introduce_struct()
 {
@@ -23,200 +23,200 @@ Film introduce_struct()
     return in;
 }
 
-Node *createNode(Film value)
+Nod *creareNod(Film valoare)
 {
-    Node *result = malloc(sizeof(Node));
-    if (result != NULL)
+    Nod *rezultat = malloc(sizeof(Nod));
+    if (rezultat != NULL)
     {
-        result->left = NULL;
-        result->right = NULL;
-        result->value = value;
+        rezultat->stanga = NULL;
+        rezultat->dreapta = NULL;
+        rezultat->valoare = valoare;
     }
-    return result;
+    return rezultat;
 }
 
-bool insertStruct(Node **rootptr, Film value)
+bool introduceStruct(Nod **radacinaptr, Film valoare)
 {
-    Node *root = *rootptr;
+    Nod *radacina = *radacinaptr;
 
-    if (root == NULL)
+    if (radacina == NULL)
     {
-        (*rootptr) = createNode(value);
+        (*radacinaptr) = creareNod(valoare);
         return true;
     }
 
-    if (strcmp(value.denumirea, root->value.denumirea) == 0)
+    if (strcmp(valoare.denumirea, radacina->valoare.denumirea) == 0)
         return false;
 
-    if (strcmp(value.denumirea, root->value.denumirea) < 0)
-        return insertStruct(&(root->left), value);
+    if (strcmp(valoare.denumirea, radacina->valoare.denumirea) < 0)
+        return introduceStruct(&(radacina->stanga), valoare);
     else
-        return insertStruct(&(root->right), value);
+        return introduceStruct(&(radacina->dreapta), valoare);
 }
 
-int treeNodeNum = 0;
-void createTree()
+int numarNoduri = 0;
+void creareArbore()
 {
 
     while (true)
     {
         Film in;
-        printf("valoarea nodului %d:\n", treeNodeNum);
+        printf("valoarea nodului %d:\n", numarNoduri);
         in = introduce_struct();
 
-        if (!insertStruct(&root, in))
+        if (!introduceStruct(&radacina, in))
             printf("valoarea data deja exista.\n");
-        treeNodeNum++;
+        numarNoduri++;
 
-        int choice;
+        int alegere;
         printf("doriti sa mai introduceti o structura? (1/0) ");
-        if (scanf("%d", &choice) && choice == 0)
+        if (scanf("%d", &alegere) && alegere == 0)
             return;
-        else if (choice != 1)
+        else if (alegere != 1)
             break;
     }
 }
 
-void printTabs(int len)
+void afiseazaInserarea(int nivel)
 {
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < nivel; i++)
     {
         printf("\t");
     }
 }
 
-void show_struct(Film in, int level)
+void show_struct(Film in, int nivel)
 {
-    printTabs(level);
+    afiseazaInserarea(nivel);
     printf("denumirea: ");
     printf("%s\n", in.denumirea);
 
-    printTabs(level);
+    afiseazaInserarea(nivel);
     printf("tara: ");
     printf("%s\n", in.tara);
 
-    printTabs(level);
+    afiseazaInserarea(nivel);
     printf("regizorul: ");
     printf("%s\n", in.regizorul);
 
-    printTabs(level);
+    afiseazaInserarea(nivel);
     printf("genul: ");
     printf("%s\n", in.genul);
 
-    printTabs(level);
+    afiseazaInserarea(nivel);
     printf("anul: ");
     printf("%d\n", in.anul);
 }
 
-void printTreeRec(Node *root, int level)
+void afisareArboreRec(Nod *radacina, int nivel)
 {
-    if (root == NULL)
+    if (radacina == NULL)
     {
-        printTabs(level);
+        afiseazaInserarea(nivel);
         printf("<empty>\n");
         return;
     }
 
-    show_struct(root->value, level);
+    show_struct(radacina->valoare, nivel);
 
-    printTabs(level);
-    printf("left\n");
+    afiseazaInserarea(nivel);
+    printf("stanga\n");
 
-    printTreeRec(root->left, level + 1);
+    afisareArboreRec(radacina->stanga, nivel + 1);
 
-    printTabs(level);
-    printf("right\n");
+    afiseazaInserarea(nivel);
+    printf("dreapta\n");
 
-    printTreeRec(root->right, level + 1);
+    afisareArboreRec(radacina->dreapta, nivel + 1);
 
-    printTabs(level);
+    afiseazaInserarea(nivel);
     printf("done\n");
 }
 
-void printTree()
+void afisareArbore()
 {
-    printTreeRec(root, 0);
+    afisareArboreRec(radacina, 0);
 }
 
-Node *findStructRec(Node *root, char *value)
+Nod *cautaStructuraRec(Nod *radacina, char *valoare)
 {
-    if (root == NULL)
+    if (radacina == NULL)
         return NULL;
-    if (strcmp(root->value.denumirea, value) == 0)
-        return root;
+    if (strcmp(radacina->valoare.denumirea, valoare) == 0)
+        return radacina;
 
-    if (strcmp(value, root->value.denumirea) < 0)
-        return findStructRec(root->left, value);
+    if (strcmp(valoare, radacina->valoare.denumirea) < 0)
+        return cautaStructuraRec(radacina->stanga, valoare);
     else
-        return findStructRec(root->right, value);
+        return cautaStructuraRec(radacina->dreapta, valoare);
 }
 
-Node *findStruct(char *value)
+Nod *cautaStructura(char *valoare)
 {
-    return findStructRec(root, value);
+    return cautaStructuraRec(radacina, valoare);
 }
 
-void modify(char *value)
+void modifica(char *valoare)
 {
-    Node *change;
+    Nod *modificare;
 
-    change = findStruct(value);
+    modificare = cautaStructura(valoare);
 
-    change->value = introduce_struct();
+    modificare->valoare = introduce_struct();
 }
 
-int countNodesRec(Node *root)
+int numaraNoduriRec(Nod *radacina)
 {
-    int res = 0;
-    if (root->right != NULL)
-        res += countNodesRec(root->right) + 1;
-    if (root->left != NULL)
-        res += countNodesRec(root->left) + 1;
+    int rezultat = 0;
+    if (radacina->dreapta != NULL)
+        rezultat += numaraNoduriRec(radacina->dreapta) + 1;
+    if (radacina->stanga != NULL)
+        rezultat += numaraNoduriRec(radacina->stanga) + 1;
 
-    return res;
+    return rezultat;
 }
 
-int countNodes()
+int numaraNoduri()
 {
-    if (root != NULL)
-        return countNodesRec(root) + 1;
-    else
-        return 0;
-}
-
-int heightRec(Node *root)
-{
-    int right = 0, left = 0;
-    if (root->right != NULL)
-        right += heightRec(root->right) + 1;
-    if (root->left != NULL)
-        left += heightRec(root->left) + 1;
-
-    if (right > left)
-        return right;
-    else
-        return left;
-}
-
-int height()
-{
-    if (root != NULL)
-        return heightRec(root) + 1;
+    if (radacina != NULL)
+        return numaraNoduriRec(radacina) + 1;
     else
         return 0;
 }
 
-void freeTreeRec(Node *root)
+int inaltimeaRec(Nod *radacina)
 {
-    if (!root)
+    int dreapta = 0, stanga = 0;
+    if (radacina->dreapta != NULL)
+        dreapta += inaltimeaRec(radacina->dreapta) + 1;
+    if (radacina->stanga != NULL)
+        stanga += inaltimeaRec(radacina->stanga) + 1;
+
+    if (dreapta > stanga)
+        return dreapta;
+    else
+        return stanga;
+}
+
+int inaltimea()
+{
+    if (radacina != NULL)
+        return inaltimeaRec(radacina) + 1;
+    else
+        return 0;
+}
+
+void eliberareMemorieRec(Nod *radacina)
+{
+    if (!radacina)
         return;
-    freeTreeRec(root->right);
-    freeTreeRec(root->left);
+    eliberareMemorieRec(radacina->dreapta);
+    eliberareMemorieRec(radacina->stanga);
 
-    free(root);
+    free(radacina);
 }
 
-void freeTree()
+void eliberareMemorie()
 {
-    freeTreeRec(root);
+    eliberareMemorieRec(radacina);
 }

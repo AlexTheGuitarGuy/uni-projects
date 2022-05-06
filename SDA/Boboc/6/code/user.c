@@ -21,17 +21,17 @@ int handle_options(int in)
     switch (in)
     {
     case 1:
-        createTree();
+        creareArbore();
         break;
     case 2:
-        printTree();
+        afisareArbore();
         break;
     case 3:
-        char find[MAX_STRLEN];
-        printf("modelul elementului cautat: ");
-        if (scanf("%s", find))
+        char cautare[20];
+        printf("denumirea elementului cautat: ");
+        if (scanf("%s", cautare))
         {
-            Node *res = findStruct(find);
+            Nod *res = cautaStructura(cautare);
             if (res == NULL)
                 printf("elementul cautat nu se afla in arbore.\n");
             else
@@ -41,19 +41,19 @@ int handle_options(int in)
             printf("valoare invalida.");
         break;
     case 4:
-        char choice[MAX_STRLEN];
-        printf("modelul elementului schimbat: ");
-        if (scanf("%s", choice))
-            modify(choice);
+        char alegere[20];
+        printf("denumirea elementului schimbat: ");
+        if (scanf("%s", alegere))
+            modifica(alegere);
         break;
     case 5:
-        printf("arborele dat are %d noduri.\n", countNodes());
+        printf("arborele dat are %d noduri.\n", numaraNoduri());
         break;
     case 6:
-        printf("arborele dat are intaltimea de %d.\n", height());
+        printf("arborele dat are intaltimea de %d.\n", inaltimea());
         break;
     case 7:
-        freeTree();
+        eliberareMemorie();
         break;
     case 0:
         return 1;
@@ -64,8 +64,9 @@ int handle_options(int in)
     return (1);
 }
 
-int handle_input()
+int main()
 {
+
     int in;
 
     do
@@ -76,25 +77,14 @@ int handle_input()
         if (!scanf("%d", &in))
         {
             printf("\nvaloare invalida.\n");
-            return (0);
+            return (1);
         }
         else if (!handle_options(in))
         {
-            return (0);
+            return (1);
         }
 
     } while (in != 0);
-
-    return (1);
-}
-
-int main()
-{
-
-    if (!handle_input())
-    {
-        return (1);
-    }
 
     return (0);
 }

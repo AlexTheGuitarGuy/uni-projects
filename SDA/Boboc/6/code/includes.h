@@ -1,5 +1,4 @@
 #pragma once
-#define MAX_STRLEN 20
 
 typedef struct Film
 {
@@ -10,17 +9,17 @@ typedef struct Film
     int anul;
 } Film;
 
-typedef struct Node
+typedef struct Nod
 {
-    Film value;
-    struct Node *left;
-    struct Node *right;
-} Node;
+    Film valoare;
+    struct Nod *stanga;
+    struct Nod *dreapta;
+} Nod;
 
-void createTree();
-void printTree();
-Node *findStruct(char *value);
-void modify(char *value);
-int countNodes();
-int height();
-void freeTree();
+void creareArbore();
+void afisareArbore();
+Nod *cautaStructura(char *valoare);
+void modifica(char *valoare);
+int numaraNoduri();
+int inaltimea();
+void eliberareMemorie();
