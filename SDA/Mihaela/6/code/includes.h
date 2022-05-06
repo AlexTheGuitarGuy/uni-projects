@@ -1,5 +1,4 @@
 #pragma once
-#define MAX_STRLEN 20
 
 typedef struct Film
 {
