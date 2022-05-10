@@ -4,6 +4,8 @@
         "string": "c",
         "string_view": "c",
         "string.h": "c",
-        "includes.h": "c"
+        "includes.h": "c",
+        "stdlib.h": "c",
+        "*.ipp": "c"
     }
 }

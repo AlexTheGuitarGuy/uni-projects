@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "*.ipp": "c",
+        "array": "c",
+        "deque": "c",
+        "list": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "unordered_set": "c",
+        "vector": "c",
+        "string_view": "c",
+        "rope": "c",
+        "initializer_list": "c",
+        "valarray": "c",
+        "stdio.h": "c"
+    }
+}
