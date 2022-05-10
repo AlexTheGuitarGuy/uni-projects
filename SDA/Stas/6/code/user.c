@@ -27,7 +27,7 @@ int handle_options(int in)
         printTree();
         break;
     case 3:
-        char find[20];
+        char find[MAX_STRLEN];
         printf("modelul elementului cautat: ");
         if (scanf("%s", find))
         {
@@ -41,8 +41,8 @@ int handle_options(int in)
             printf("valoare invalida.");
         break;
     case 4:
-        char choice[20];
-        printf("denumirea elementului schimbat: ");
+        char choice[MAX_STRLEN];
+        printf("adresa elementului schimbat: ");
         if (scanf("%s", choice))
             modify(choice);
         break;
