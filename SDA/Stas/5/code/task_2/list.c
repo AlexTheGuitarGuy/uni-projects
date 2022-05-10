@@ -136,7 +136,7 @@ void insert(int pos, int data, Int_Node **head)
         newNode->next = temp->next;
 
         temp->next = newNode;
-    }
+     }
 }
 
 void deleteNode(Int_Node *root, int index)
