@@ -229,12 +229,12 @@ int main()
 {
     /* Let us create above shown weighted
        and undirected graph */
-    cout << "Cate varfuri si muchii are graful?" << endl;
-    int V, E;
-    cin >> V >> E;
+    // cout << "Cate varfuri si muchii are graful?" << endl;
+    int V = 9, E = 11;
+    // cin >> V >> E;
     Graph g(V, E);
 
-    int u, v, w;
+    /*int u, v, w;
     cout << "introduceti muchiile" << endl;
     int i = 0;
     while (i < g.E)
@@ -243,10 +243,10 @@ int main()
         cin >> u >> v >> w;
         g.addEdge(u, v, w);
         i++;
-    }
+    }*/
 
     //  making above shown graph
-    /*g.addEdge(1, 2, 4);
+    g.addEdge(1, 2, 4);
     g.addEdge(1, 7, 8);
     g.addEdge(2, 3, 8);
     g.addEdge(2, 7, 11);
@@ -256,7 +256,7 @@ int main()
     g.addEdge(9, 7, 6);
     g.addEdge(7, 6, 2);
     g.addEdge(4, 5, 9);
-    g.addEdge(6, 4, 10);*/
+    g.addEdge(6, 4, 10);
 
     cout << "Edges of MST are \n";
     int mst_wt = g.kruskalMST();
